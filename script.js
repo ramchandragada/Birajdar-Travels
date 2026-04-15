@@ -45,6 +45,12 @@ form.addEventListener('submit', (e) => {
 *Car:* ${car}`;
 
   window.open(`https://wa.me/919322613925?text=${msg}`, '_blank');
+
+  const status = document.getElementById('formStatus');
+  if (status) {
+    status.textContent = `Thanks ${name}! Opening WhatsApp to confirm your booking...`;
+    status.classList.add('success');
+  }
 });
 
 // Scroll reveal animation

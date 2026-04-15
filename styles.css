@@ -220,6 +220,8 @@ h1,h2,h3,h4{font-weight:700;line-height:1.2}
 .form-group select option{background:var(--surface);color:#fff}
 .booking-form .btn{margin-top:10px}
 .form-note{text-align:center;color:var(--muted);font-size:.82rem;margin-top:14px}
+.form-status{text-align:center;margin-top:12px;font-size:.9rem;min-height:1.2em}
+.form-status.success{color:#25D366;font-weight:600}
 
 /* Testimonials */
 .testimonials{background:var(--bg)}

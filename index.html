@@ -10,6 +10,11 @@
 <meta property="og:title" content="Birajdar Travels | Taxi Rentals in Solapur" />
 <meta property="og:description" content="Reliable, affordable, well-maintained taxis in Solapur. Book your ride now." />
 <meta property="og:type" content="website" />
+<meta property="og:image" content="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200&q=80" />
+<meta property="og:url" content="https://ramchandragada.github.io/Birajdar-Travels/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#ffc107" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%95%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -67,7 +72,7 @@
 <section class="section about" id="about">
   <div class="container grid-2">
     <div class="about-img">
-      <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=900&q=80" alt="Premium taxi service" />
+      <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=900&q=80" alt="Birajdar Travels premium taxi service car parked at pickup point in Solapur" loading="lazy" />
       <div class="floating-stat">
         <div class="stat-num">10K+</div>
         <div class="stat-label">Happy Customers</div>
@@ -143,7 +148,7 @@
     <div class="fleet-grid">
       <div class="fleet-card">
         <div class="fleet-img">
-          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/44709/tigor-exterior-right-front-three-quarter-2.jpeg?q=80" alt="Tata Tigor" />
+          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/44709/tigor-exterior-right-front-three-quarter-2.jpeg?q=80" alt="Tata Tigor sedan available for rent at 11 rupees per km" loading="lazy" />
           <span class="fleet-tag">Sedan</span>
         </div>
         <div class="fleet-body">
@@ -161,7 +166,7 @@
       </div>
       <div class="fleet-card featured">
         <div class="fleet-img">
-          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/159099/baleno-exterior-right-front-three-quarter-76.jpeg?q=80" alt="Maruti Baleno" />
+          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/159099/baleno-exterior-right-front-three-quarter-76.jpeg?q=80" alt="Maruti Baleno hatchback available for rent at 11 rupees per km" loading="lazy" />
           <span class="fleet-tag">Hatchback</span>
           <span class="popular-tag"><i class="fa-solid fa-fire"></i> Popular</span>
         </div>
@@ -180,7 +185,7 @@
       </div>
       <div class="fleet-card">
         <div class="fleet-img">
-          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/44709/innova-crysta-exterior-right-front-three-quarter-5.jpeg?q=80" alt="Toyota Innova" />
+          <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/44709/innova-crysta-exterior-right-front-three-quarter-5.jpeg?q=80" alt="Toyota Innova SUV 7-seater available for rent at 20 rupees per km" loading="lazy" />
           <span class="fleet-tag">SUV</span>
         </div>
         <div class="fleet-body">
@@ -270,32 +275,32 @@
       <h3>Request a Booking</h3>
       <div class="form-row">
         <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="fName" placeholder="Enter your name" required />
+          <label for="fName">Full Name</label>
+          <input type="text" id="fName" name="name" placeholder="Enter your name" autocomplete="name" required />
         </div>
         <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="fPhone" placeholder="+91 98765 43210" required />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Pickup Location</label>
-          <input type="text" id="fPickup" placeholder="e.g. Solapur Airport" required />
-        </div>
-        <div class="form-group">
-          <label>Drop Location</label>
-          <input type="text" id="fDrop" placeholder="e.g. Pune" required />
+          <label for="fPhone">Phone Number</label>
+          <input type="tel" id="fPhone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Travel Date</label>
-          <input type="date" id="fDate" required />
+          <label for="fPickup">Pickup Location</label>
+          <input type="text" id="fPickup" name="pickup" placeholder="e.g. Solapur Airport" required />
         </div>
         <div class="form-group">
-          <label>Car Type</label>
-          <select id="fCar">
+          <label for="fDrop">Drop Location</label>
+          <input type="text" id="fDrop" name="drop" placeholder="e.g. Pune" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fDate">Travel Date</label>
+          <input type="date" id="fDate" name="date" required />
+        </div>
+        <div class="form-group">
+          <label for="fCar">Car Type</label>
+          <select id="fCar" name="car">
             <option>Tata Tigor – ₹11/km</option>
             <option>Maruti Baleno – ₹11/km</option>
             <option>Toyota Innova – ₹20/km</option>
@@ -303,8 +308,9 @@
         </div>
       </div>
       <button type="submit" class="btn btn-primary btn-block btn-lg">
-        <i class="fa-brands fa-whatsapp"></i> Book via WhatsApp
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Book via WhatsApp
       </button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
       <p class="form-note">By submitting, you agree to be contacted about your booking.</p>
     </form>
   </div>
@@ -363,28 +369,28 @@
     <div class="contact-wrap">
       <div class="contact-cards">
         <div class="contact-card">
-          <div class="cc-icon"><i class="fa-solid fa-location-dot"></i></div>
-          <h4>Address</h4>
+          <div class="cc-icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></div>
+          <h3>Address</h3>
           <p>Opposite Solapur Airport,<br>Solapur - 413224</p>
         </div>
         <div class="contact-card">
-          <div class="cc-icon"><i class="fa-solid fa-user"></i></div>
-          <h4>Contact Person</h4>
+          <div class="cc-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></div>
+          <h3>Contact Person</h3>
           <p>Vikrant Birajdar</p>
         </div>
         <div class="contact-card">
-          <div class="cc-icon"><i class="fa-solid fa-phone"></i></div>
-          <h4>Phone</h4>
+          <div class="cc-icon" aria-hidden="true"><i class="fa-solid fa-phone"></i></div>
+          <h3>Phone</h3>
           <p><a href="tel:+919322613925">+91 9322613925</a></p>
         </div>
         <div class="contact-card">
-          <div class="cc-icon"><i class="fa-brands fa-whatsapp"></i></div>
-          <h4>WhatsApp</h4>
-          <p><a href="https://wa.me/919322613925" target="_blank">Chat Instantly</a></p>
+          <div class="cc-icon" aria-hidden="true"><i class="fa-brands fa-whatsapp"></i></div>
+          <h3>WhatsApp</h3>
+          <p><a href="https://wa.me/919322613925" target="_blank" rel="noopener">Chat Instantly</a></p>
         </div>
       </div>
       <div class="map-wrap">
-        <iframe src="https://www.google.com/maps?q=Solapur+Airport,Solapur&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps?q=Solapur+Airport,Solapur&output=embed" title="Birajdar Travels location on Google Maps" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
@@ -400,13 +406,13 @@
       </a>
       <p>Reliable Taxi Rentals & Travel Services in Solapur. Your trusted travel partner for local, outstation, and airport transfers.</p>
       <div class="socials">
-        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://wa.me/919322613925" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        <a href="https://wa.me/919322613925" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
       </div>
     </div>
     <div class="footer-col">
-      <h4>Quick Links</h4>
+      <h3>Quick Links</h3>
       <ul>
         <li><a href="#about">About Us</a></li>
         <li><a href="#services">Services</a></li>
@@ -416,7 +422,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Services</h4>
+      <h3>Services</h3>
       <ul>
         <li>Daily Car Rentals</li>
         <li>Outstation Trips</li>
@@ -426,7 +432,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contact</h4>
+      <h3>Contact</h3>
       <ul class="contact-list">
         <li><i class="fa-solid fa-location-dot"></i> Opp. Solapur Airport, Solapur - 413224</li>
         <li><i class="fa-solid fa-phone"></i> <a href="tel:+919322613925">+91 9322613925</a></li>
