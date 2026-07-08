@@ -1,21 +1,43 @@
 // Navbar scroll effect
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+
+function setActiveNav() {
+  const scrollY = window.scrollY + 120;
+  sections.forEach(section => {
+    const top = section.offsetTop;
+    const height = section.offsetHeight;
+    const id = section.getAttribute('id');
+    if (scrollY >= top && scrollY < top + height) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}
+window.addEventListener('scroll', setActiveNav, { passive: true });
+setActiveNav();
 
 // Mobile menu toggle
 const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navLinks');
+const navLinksEl = document.getElementById('navLinks');
+
 menuToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
+  navLinksEl.classList.toggle('open');
   const icon = menuToggle.querySelector('i');
   icon.classList.toggle('fa-bars');
   icon.classList.toggle('fa-xmark');
 });
-document.querySelectorAll('.nav-links a').forEach(a =>
+
+document.querySelectorAll('.nav-link').forEach(a =>
   a.addEventListener('click', () => {
-    navLinks.classList.remove('open');
+    navLinksEl.classList.remove('open');
     menuToggle.querySelector('i').classList.add('fa-bars');
     menuToggle.querySelector('i').classList.remove('fa-xmark');
   })
@@ -53,9 +75,19 @@ form.addEventListener('submit', (e) => {
   }
 });
 
-// Scroll reveal animation
-const revealEls = document.querySelectorAll('.section-head, .service-card, .fleet-card, .testi-card, .contact-card, .about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, .tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta');
-revealEls.forEach(el => el.classList.add('reveal'));
+// Scroll reveal with stagger
+const revealEls = document.querySelectorAll(
+  '.section-head, .service-card, .fleet-card, .testi-card, .contact-card, ' +
+  '.about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, ' +
+  '.tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta, ' +
+  '.timeline-day, .hero-stat, .tour-highlight'
+);
+
+revealEls.forEach((el, i) => {
+  el.classList.add('reveal');
+  if (i % 3 === 1) el.classList.add('reveal-delay-1');
+  if (i % 3 === 2) el.classList.add('reveal-delay-2');
+});
 
 const io = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -64,14 +96,14 @@ const io = new IntersectionObserver((entries) => {
       io.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
 revealEls.forEach(el => io.observe(el));
 
 // Set min date to today
 const dateField = document.getElementById('fDate');
 if (dateField) {
-  const today = new Date().toISOString().split('T')[0];
-  dateField.setAttribute('min', today);
+  dateField.setAttribute('min', new Date().toISOString().split('T')[0]);
 }
 
 // Spiritual tour quick-book from CTA
