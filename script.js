@@ -54,7 +54,7 @@ form.addEventListener('submit', (e) => {
 });
 
 // Scroll reveal animation
-const revealEls = document.querySelectorAll('.section-head, .service-card, .fleet-card, .testi-card, .contact-card, .about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap');
+const revealEls = document.querySelectorAll('.section-head, .service-card, .fleet-card, .testi-card, .contact-card, .about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, .tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta');
 revealEls.forEach(el => el.classList.add('reveal'));
 
 const io = new IntersectionObserver((entries) => {
@@ -73,3 +73,15 @@ if (dateField) {
   const today = new Date().toISOString().split('T')[0];
   dateField.setAttribute('min', today);
 }
+
+// Spiritual tour quick-book from CTA
+document.querySelectorAll('[data-tour="spiritual"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const carSelect = document.getElementById('fCar');
+    const pickup = document.getElementById('fPickup');
+    const drop = document.getElementById('fDrop');
+    if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package (Mumbai–Solapur)';
+    if (pickup) pickup.value = 'Mumbai CSMT (Siddheshwar Express 12115)';
+    if (drop) drop.value = 'Akkalkot, Gangapur, Tuljapur, Pandharpur';
+  });
+});
