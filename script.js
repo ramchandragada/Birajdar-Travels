@@ -82,6 +82,6 @@ document.querySelectorAll('[data-tour="spiritual"]').forEach(btn => {
     const drop = document.getElementById('fDrop');
     if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package (Mumbai–Solapur)';
     if (pickup) pickup.value = 'Mumbai CSMT (Siddheshwar Express 12115)';
-    if (drop) drop.value = 'Akkalkot, Gangapur, Tuljapur, Pandharpur';
+    if (drop) drop.value = 'Gangapur, Akkalkot, Tuljapur, Pandharpur';
   });
 });
