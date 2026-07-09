@@ -1097,6 +1097,195 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   flex-wrap: wrap;
 }
 
+/* Tour Pricing */
+.tour-pricing {
+  margin-bottom: 36px;
+  padding: 36px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
+}
+
+.pricing-head { text-align: center; margin-bottom: 32px; }
+
+.pricing-head h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  margin-bottom: 10px;
+}
+
+.pricing-head h3 i { color: var(--gold); }
+.pricing-head p { color: var(--text-secondary); font-size: 0.95rem; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 20px;
+}
+
+.pricing-card {
+  padding: 26px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.pricing-card.featured {
+  border-color: var(--border-gold);
+  background: linear-gradient(135deg, rgba(245, 197, 24, 0.08), rgba(0, 0, 0, 0.2));
+}
+
+.pricing-card h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing-card h4 i { color: var(--gold); }
+
+.km-table, .cost-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+.km-table td {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+}
+
+.km-table td:last-child {
+  text-align: right;
+  color: var(--text);
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+
+.km-table .km-subtotal td { padding-top: 14px; color: var(--text); }
+.km-table .km-total td {
+  padding-top: 12px;
+  font-size: 1rem;
+  color: var(--gold);
+  border-bottom: none;
+}
+
+.pricing-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.pricing-line strong {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.05rem;
+}
+
+.pricing-line.subtotal {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+}
+
+.pricing-line.subtotal strong { font-size: 1.2rem; }
+
+.pricing-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+.pricing-note i { color: var(--gold); margin-right: 6px; }
+.pricing-note .fa-gift { color: var(--green); }
+
+.cost-table th {
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.cost-table td {
+  padding: 12px 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.cost-table .cost-total {
+  color: var(--text);
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.cost-table .cost-pp {
+  color: var(--gold);
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.cost-table .highlight-row {
+  background: rgba(245, 197, 24, 0.08);
+}
+
+.cost-table .highlight-row td { color: var(--text); }
+.cost-table small { color: var(--muted); font-weight: 400; }
+
+.price-hero {
+  margin-top: 20px;
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(245, 197, 24, 0.15), rgba(245, 197, 24, 0.05));
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+}
+
+.price-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.price-amount {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1.2;
+}
+
+.price-amount small {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.price-per {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
 /* ── Booking ── */
 .booking { background: var(--bg); }
 
@@ -1480,6 +1669,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   .contact-wrap { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .tour-grid, .tour-includes { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
   .hero { background-attachment: scroll; }
   .hero-cta .btn { flex: 1 1 auto; min-width: 140px; }
 }

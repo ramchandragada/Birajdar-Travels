@@ -80,7 +80,7 @@ const revealEls = document.querySelectorAll(
   '.section-head, .service-card, .fleet-card, .testi-card, .contact-card, ' +
   '.about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, ' +
   '.tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta, ' +
-  '.timeline-day, .hero-stat, .tour-highlight'
+  '.tour-pricing, .timeline-day, .hero-stat, .tour-highlight'
 );
 
 revealEls.forEach((el, i) => {
