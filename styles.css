@@ -1278,9 +1278,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .package-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
 }
 
 .package-card {
@@ -1308,9 +1308,27 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   color: var(--text);
 }
+
+.package-vehicle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.package-vehicle i { color: var(--gold); font-size: 0.7rem; }
 
 .package-group small { color: var(--muted); font-weight: 500; }
 
@@ -1340,6 +1358,109 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   font-size: 0.78rem;
   font-weight: 600;
 }
+
+.vehicle-allocation {
+  margin-bottom: 28px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.vehicle-allocation h4,
+.children-policy h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.vehicle-allocation h4 i,
+.children-policy h4 i { color: var(--gold); }
+
+.vehicle-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.vehicle-table th,
+.vehicle-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.vehicle-table th {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--card-tint);
+}
+
+.vehicle-table tbody tr:last-child td { border-bottom: none; }
+.vehicle-table tbody tr:hover { background: var(--card-tint); }
+
+.children-policy {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+}
+
+.children-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.children-rule {
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.children-age {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.children-charge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.children-rule.free .children-charge { background: rgba(21, 128, 61, 0.12); color: var(--green); }
+.children-rule.half .children-charge { background: rgba(245, 158, 11, 0.15); color: var(--gold-dark); }
+.children-rule.full .children-charge { background: var(--pill-bg); color: var(--text-secondary); }
+
+.children-rule p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.children-example {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.children-example i { color: var(--gold); margin-right: 6px; }
 
 .package-badge {
   position: absolute;
@@ -1741,6 +1862,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   .nav-cta { display: none; }
   .hero-stats { grid-template-columns: repeat(2, 1fr); }
   .timeline { grid-template-columns: 1fr; gap: 48px; }
+  .package-cards { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -1749,6 +1871,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .tour-grid, .tour-includes { grid-template-columns: 1fr; }
   .package-cards { grid-template-columns: 1fr; max-width: 360px; margin-inline: auto; }
+  .children-grid { grid-template-columns: 1fr; }
+  .vehicle-table { font-size: 0.82rem; }
+  .vehicle-table th, .vehicle-table td { padding: 10px; }
   .hero { background-attachment: scroll; }
   .hero-cta .btn { flex: 1 1 auto; min-width: 140px; }
 }

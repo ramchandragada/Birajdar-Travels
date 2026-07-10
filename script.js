@@ -46,6 +46,40 @@ document.querySelectorAll('.nav-link').forEach(a =>
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Spiritual tour pricing & vehicle allocation
+const tourPackages = {
+  2: { total: 20000, perPerson: 10000, vehicle: 'Hatchback (Maruti Baleno)' },
+  3: { total: 25000, perPerson: 8334, vehicle: 'Hatchback (Maruti Baleno)' },
+  4: { total: 30000, perPerson: 7500, vehicle: 'Sedan (Tata Tigor)' },
+  5: { total: 33000, perPerson: 6600, vehicle: 'Innova (Toyota Innova Crysta)' },
+  6: { total: 36000, perPerson: 6000, vehicle: 'Innova (Toyota Innova Crysta)' }
+};
+
+function getVehicle(seatCount) {
+  if (seatCount <= 3) return 'Hatchback (Maruti Baleno)';
+  if (seatCount === 4) return 'Sedan (Tata Tigor)';
+  return 'Innova (Toyota Innova Crysta)';
+}
+
+function getAdultPricingTier(adults) {
+  return Math.max(2, Math.min(6, adults));
+}
+
+function estimateTourPrice(adults, childHalf, childFree) {
+  const tier = getAdultPricingTier(adults);
+  const pkg = tourPackages[tier];
+  const halfPerChild = Math.round(pkg.perPerson / 2);
+  const seatCount = adults + childHalf;
+  return {
+    tier,
+    seatCount,
+    vehicle: getVehicle(seatCount),
+    perPerson: pkg.perPerson,
+    estimatedTotal: pkg.total + childHalf * halfPerChild,
+    childFree
+  };
+}
+
 // Booking form -> WhatsApp
 const form = document.getElementById('bookingForm');
 form.addEventListener('submit', (e) => {
@@ -57,6 +91,16 @@ form.addEventListener('submit', (e) => {
   const date = document.getElementById('fDate').value;
   const city = document.getElementById('fCity')?.value || '';
   const car = document.getElementById('fCar').value;
+  const adults = parseInt(document.getElementById('fAdults')?.value || '2', 10);
+  const childHalf = parseInt(document.getElementById('fChildHalf')?.value || '0', 10);
+  const childFree = parseInt(document.getElementById('fChildFree')?.value || '0', 10);
+
+  const isSpiritualTour = car.includes('Spiritual Tour');
+  let priceLine = '';
+  if (isSpiritualTour) {
+    const quote = estimateTourPrice(adults, childHalf, childFree);
+    priceLine = `%0A*Travellers:* ${adults} adult(s), ${childHalf} child (5–12), ${childFree} child (0–5 free)%0A*Vehicle:* ${quote.vehicle}%0A*Est. Package:* ₹${quote.estimatedTotal.toLocaleString('en-IN')}`;
+  }
 
   const msg =
 `*New Booking Request - Birajdar Travels*%0A
@@ -66,7 +110,7 @@ form.addEventListener('submit', (e) => {
 *Pickup:* ${pickup}%0A
 *Drop:* ${drop}%0A
 *Date:* ${date}%0A
-*Car:* ${car}`;
+*Package:* ${car}${priceLine}`;
 
   window.open(`https://wa.me/919322613925?text=${msg}`, '_blank');
 
@@ -82,7 +126,8 @@ const revealEls = document.querySelectorAll(
   '.section-head, .service-card, .fleet-card, .testi-card, .contact-card, ' +
   '.about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, ' +
   '.tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta, ' +
-  '.tour-pricing, .timeline-day, .hero-stat, .tour-highlight, .tour-arrival-banner'
+  '.tour-pricing, .timeline-day, .hero-stat, .tour-highlight, .tour-arrival-banner, ' +
+  '.vehicle-allocation, .children-policy'
 );
 
 revealEls.forEach((el, i) => {
@@ -169,7 +214,7 @@ document.querySelectorAll('[data-tour="spiritual"]').forEach(btn => {
     const cityKey = activeTab?.dataset.city || 'mumbai';
     const info = cityTravelInfo[cityKey];
 
-    if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package';
+    if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package (2–6 persons)';
     if (citySelect && info) citySelect.value = info.city;
     if (pickup && info) pickup.value = info.pickup;
     if (drop) drop.value = 'Gangapur, Akkalkot, Tuljapur, Pandharpur';
