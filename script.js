@@ -49,9 +49,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
 // Spiritual tour pricing & vehicle allocation
 const tourPackages = {
   2: { total: 20000, perPerson: 10000, vehicle: 'Hatchback (Maruti Baleno)' },
-  3: { total: 25000, perPerson: 8334, vehicle: 'Hatchback (Maruti Baleno)' },
+  3: { total: 25500, perPerson: 8500, vehicle: 'Hatchback (Maruti Baleno)' },
   4: { total: 30000, perPerson: 7500, vehicle: 'Sedan (Tata Tigor)' },
-  5: { total: 33000, perPerson: 6600, vehicle: 'Innova (Toyota Innova Crysta)' },
+  5: { total: 32500, perPerson: 6500, vehicle: 'Innova (Toyota Innova Crysta)' },
   6: { total: 36000, perPerson: 6000, vehicle: 'Innova (Toyota Innova Crysta)' }
 };
 
