@@ -1330,6 +1330,17 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   color: var(--text-secondary);
 }
 
+.package-save {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(21, 128, 61, 0.1);
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 .package-badge {
   position: absolute;
   top: -10px;
