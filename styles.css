@@ -870,6 +870,98 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .tour-highlight:hover { border-color: var(--border-gold); color: var(--text); }
 .tour-highlight i { color: var(--gold); }
 
+.tour-arrival-banner {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px 28px;
+  margin-bottom: 36px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(255, 255, 255, 0.9));
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.arrival-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--on-gold);
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.tour-arrival-banner h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: var(--gold-dark);
+}
+
+.tour-arrival-banner p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.tour-origin-intro {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 20px;
+  line-height: 1.55;
+}
+
+.city-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.city-tab {
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--pill-bg);
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+}
+
+.city-tab:hover {
+  background: var(--pill-bg-hover);
+  border-color: var(--border-gold);
+  color: var(--text);
+}
+
+.city-tab.active {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-color: transparent;
+  color: var(--on-gold);
+  box-shadow: var(--shadow-gold);
+}
+
+.city-panel {
+  animation: fadeUp 0.35s var(--ease) both;
+}
+
+.city-panel[hidden] { display: none; }
+
+.alt-train {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.alt-train b { color: var(--gold); }
+
 .tour-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1662,5 +1754,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   .trust-points { flex-direction: column; align-items: center; }
   .tour-cta-btns { flex-direction: column; }
   .tour-cta-btns .btn { width: 100%; }
+  .tour-arrival-banner { flex-direction: column; padding: 20px; }
+  .city-tabs { justify-content: center; }
+  .city-tab { padding: 8px 14px; font-size: 0.82rem; }
   .rate-table th, .rate-table td { padding: 12px 14px; font-size: 0.82rem; }
 }

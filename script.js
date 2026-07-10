@@ -55,12 +55,14 @@ form.addEventListener('submit', (e) => {
   const pickup = document.getElementById('fPickup').value.trim();
   const drop = document.getElementById('fDrop').value.trim();
   const date = document.getElementById('fDate').value;
+  const city = document.getElementById('fCity')?.value || '';
   const car = document.getElementById('fCar').value;
 
   const msg =
 `*New Booking Request - Birajdar Travels*%0A
 *Name:* ${name}%0A
 *Phone:* ${phone}%0A
+*Traveling From:* ${city}%0A
 *Pickup:* ${pickup}%0A
 *Drop:* ${drop}%0A
 *Date:* ${date}%0A
@@ -80,7 +82,7 @@ const revealEls = document.querySelectorAll(
   '.section-head, .service-card, .fleet-card, .testi-card, .contact-card, ' +
   '.about-img, .about-text, .booking-info, .booking-form, .rate-table-wrap, ' +
   '.tour-train-card, .tour-places-card, .itinerary-wrap, .include-card, .tour-cta, ' +
-  '.tour-pricing, .timeline-day, .hero-stat, .tour-highlight'
+  '.tour-pricing, .timeline-day, .hero-stat, .tour-highlight, .tour-arrival-banner'
 );
 
 revealEls.forEach((el, i) => {
@@ -107,13 +109,69 @@ if (dateField) {
 }
 
 // Spiritual tour quick-book from CTA
+const cityTravelInfo = {
+  mumbai: {
+    city: 'Mumbai',
+    pickup: 'Solapur Junction (arriving via Siddheshwar Express 12115)',
+    note: 'Board 12115 night before Day 1 from Mumbai CSMT 22:40'
+  },
+  pune: {
+    city: 'Pune',
+    pickup: 'Solapur Junction (arriving via Pune-Solapur 11417 or 16381)',
+    note: 'Board night train from Pune — arrive Solapur before 7:30 AM'
+  },
+  nagpur: {
+    city: 'Nagpur',
+    pickup: 'Solapur (overnight bus or arrive 1 day prior evening)',
+    note: 'Overnight AC bus Nagpur→Solapur or arrive previous evening'
+  },
+  hyderabad: {
+    city: 'Hyderabad',
+    pickup: 'Solapur Junction (arriving via train 17030 or 22731)',
+    note: 'Board night train from Hyderabad — arrive Solapur before 7:30 AM'
+  },
+  bengaluru: {
+    city: 'Bengaluru',
+    pickup: 'Solapur Junction (arriving via Karnataka Express 12627 or 11312)',
+    note: 'Board evening train from Bengaluru — arrive Solapur morning Day 1'
+  }
+};
+
+// City tabs for spiritual tour
+const cityTabs = document.querySelectorAll('.city-tab');
+const cityPanels = document.querySelectorAll('.city-panel');
+
+cityTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const city = tab.dataset.city;
+    cityTabs.forEach(t => {
+      t.classList.toggle('active', t === tab);
+      t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+    });
+    cityPanels.forEach(panel => {
+      const isActive = panel.id === `city-${city}`;
+      panel.classList.toggle('active', isActive);
+      panel.hidden = !isActive;
+    });
+    const citySelect = document.getElementById('fCity');
+    const info = cityTravelInfo[city];
+    if (citySelect && info) citySelect.value = info.city;
+  });
+});
+
 document.querySelectorAll('[data-tour="spiritual"]').forEach(btn => {
   btn.addEventListener('click', () => {
     const carSelect = document.getElementById('fCar');
+    const citySelect = document.getElementById('fCity');
     const pickup = document.getElementById('fPickup');
     const drop = document.getElementById('fDrop');
-    if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package (Mumbai–Solapur)';
-    if (pickup) pickup.value = 'Mumbai CSMT (Siddheshwar Express 12115)';
+    const activeTab = document.querySelector('.city-tab.active');
+    const cityKey = activeTab?.dataset.city || 'mumbai';
+    const info = cityTravelInfo[cityKey];
+
+    if (carSelect) carSelect.value = 'Spiritual Tour – 2 Day Package';
+    if (citySelect && info) citySelect.value = info.city;
+    if (pickup && info) pickup.value = info.pickup;
     if (drop) drop.value = 'Gangapur, Akkalkot, Tuljapur, Pandharpur';
   });
 });
