@@ -5,29 +5,38 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #060a12;
-  --bg-elevated: #0c1220;
-  --bg-card: rgba(14, 20, 36, 0.72);
-  --surface: #101828;
-  --surface-hover: #162035;
-  --text: #f0f4f8;
-  --text-secondary: #94a3b8;
+  --bg: #f4f7fb;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --surface: #eef2f7;
+  --surface-hover: #e2e8f0;
+  --text: #0f172a;
+  --text-secondary: #475569;
   --muted: #64748b;
-  --gold: #f5c518;
-  --gold-light: #fde68a;
-  --gold-dark: #d4a017;
-  --gold-glow: rgba(245, 197, 24, 0.35);
-  --accent: var(--gold);
-  --accent-2: var(--gold-dark);
-  --green: #22c55e;
+  --gold: #e8a317;
+  --gold-light: #fbbf24;
+  --gold-dark: #b45309;
+  --gold-glow: rgba(232, 163, 23, 0.28);
+  --accent: var(--gold-dark);
+  --accent-2: var(--gold);
+  --green: #16a34a;
   --whatsapp: #25d366;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-gold: rgba(245, 197, 24, 0.25);
-  --glass: rgba(12, 18, 32, 0.65);
-  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.45);
-  --shadow-gold: 0 8px 32px var(--gold-glow);
+  --border: rgba(15, 23, 42, 0.1);
+  --border-gold: rgba(180, 83, 9, 0.28);
+  --glass: rgba(255, 255, 255, 0.88);
+  --on-gold: #1a1402;
+  --pill-bg: rgba(15, 23, 42, 0.05);
+  --pill-bg-hover: rgba(15, 23, 42, 0.09);
+  --card-tint: rgba(15, 23, 42, 0.03);
+  --card-tint-2: rgba(15, 23, 42, 0.05);
+  --input-bg: #f8fafc;
+  --footer-bg: #e8edf4;
+  --nav-scrolled: rgba(255, 255, 255, 0.94);
+  --nav-mobile: rgba(255, 255, 255, 0.98);
+  --shadow-sm: 0 2px 12px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 28px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.1);
+  --shadow-gold: 0 8px 24px var(--gold-glow);
   --radius: 16px;
   --radius-lg: 24px;
   --radius-pill: 999px;
@@ -63,7 +72,7 @@ ul { list-style: none; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.78rem;
@@ -96,7 +105,7 @@ ul { list-style: none; }
 }
 
 .section-head p { color: var(--text-secondary); font-size: 1.05rem; }
-.accent { color: var(--gold); }
+.accent { color: var(--gold-dark); }
 
 .gradient-text {
   background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
@@ -126,20 +135,20 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .orb-1 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(245, 197, 24, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.22), transparent 70%);
   top: -10%; right: -5%;
 }
 
 .orb-2 {
   width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 70%);
   bottom: 20%; left: -10%;
   animation-delay: -7s;
 }
 
 .orb-3 {
   width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(245, 197, 24, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.15), transparent 70%);
   bottom: -5%; right: 25%;
   animation-delay: -14s;
 }
@@ -169,7 +178,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .btn-primary {
   background: linear-gradient(135deg, var(--gold-light), var(--gold) 45%, var(--gold-dark));
-  color: #0a0e17;
+  color: var(--on-gold);
   border-color: transparent;
   box-shadow: var(--shadow-gold);
 }
@@ -180,27 +189,28 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 }
 
 .btn-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.85);
   color: var(--text);
-  border-color: rgba(255, 255, 255, 0.35);
+  border-color: var(--border);
   backdrop-filter: blur(8px);
 }
 
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.2);
   transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-glass {
-  background: rgba(245, 197, 24, 0.1);
-  color: var(--gold-light);
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--gold-dark);
   border-color: var(--border-gold);
   backdrop-filter: blur(12px);
 }
 
 .btn-glass:hover {
-  background: rgba(245, 197, 24, 0.18);
+  background: rgba(251, 191, 36, 0.2);
   transform: translateY(-3px);
 }
 
@@ -233,12 +243,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   top: 0; left: 0; right: 0;
   z-index: 1000;
   padding: 14px 0;
-  transition: padding 0.35s var(--ease), background 0.35s var(--ease);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: padding 0.35s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 
 .navbar.scrolled {
   padding: 10px 0;
-  background: rgba(6, 10, 18, 0.85);
+  background: var(--nav-scrolled);
   backdrop-filter: blur(20px) saturate(1.4);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
@@ -268,18 +281,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   display: grid;
   place-items: center;
-  color: #0a0e17;
+  color: var(--on-gold);
   font-size: 1.1rem;
   box-shadow: var(--shadow-gold);
 }
 
-.logo-text b { color: var(--gold); font-weight: 800; }
+.logo-text b { color: var(--gold-dark); font-weight: 800; }
 
 .nav-links {
   display: flex;
   gap: 6px;
   padding: 6px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pill-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   backdrop-filter: blur(12px);
@@ -297,14 +310,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .nav-link:hover,
 .nav-link.active {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--pill-bg-hover);
 }
 
-.nav-link.active { color: var(--gold); }
+.nav-link.active { color: var(--gold-dark); }
 
 .menu-toggle {
   display: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--pill-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   color: var(--text);
@@ -340,8 +353,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(6, 10, 18, 0.55) 0%, rgba(6, 10, 18, 0.88) 55%, var(--bg) 100%),
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 197, 24, 0.12), transparent 60%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(244, 247, 251, 0.94) 55%, var(--bg) 100%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(251, 191, 36, 0.15), transparent 60%);
 }
 
 .hero-content {
@@ -358,11 +371,11 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   gap: 8px;
   padding: 8px 20px;
   border-radius: var(--radius-pill);
-  background: rgba(245, 197, 24, 0.1);
+  background: rgba(251, 191, 36, 0.15);
   border: 1px solid var(--border-gold);
-  color: var(--gold-light);
+  color: var(--gold-dark);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 24px;
   backdrop-filter: blur(8px);
   animation: fadeUp 0.7s var(--ease) both;
@@ -406,13 +419,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  backdrop-filter: blur(16px);
-  transition: border-color 0.3s, transform 0.3s;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 .hero-stat:hover {
   border-color: var(--border-gold);
   transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
 }
 
 .hero-stat-num {
@@ -420,7 +434,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 800;
-  color: var(--gold);
+  color: var(--gold-dark);
   line-height: 1.1;
 }
 
@@ -446,14 +460,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   align-items: center;
   gap: 8px;
   padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   font-size: 0.88rem;
   color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
 }
 
-.trust-item i { color: var(--gold); }
+.trust-item i { color: var(--gold-dark); }
 
 .scroll-cue {
   position: absolute;
@@ -511,7 +526,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   pointer-events: none;
 }
 
@@ -529,7 +544,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   bottom: 24px;
   right: 24px;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #0a0e17;
+  color: var(--on-gold);
   padding: 22px 28px;
   border-radius: var(--radius);
   box-shadow: var(--shadow-gold);
@@ -559,7 +574,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--card-tint);
   border: 1px solid var(--border);
   border-radius: 12px;
   font-size: 0.92rem;
@@ -579,15 +594,36 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   gap: 20px;
 }
 
+.service-card,
+.fleet-card,
+.testi-card,
+.contact-card,
+.booking-form,
+.tour-train-card,
+.tour-places-card,
+.itinerary-wrap,
+.include-card,
+.tour-pricing,
+.package-card {
+  box-shadow: var(--shadow-sm);
+}
+
 .service-card {
   padding: 32px 28px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(16px);
   transition: transform 0.35s var(--ease), border-color 0.35s, box-shadow 0.35s;
   position: relative;
   overflow: hidden;
+}
+
+.service-card:hover,
+.fleet-card:hover,
+.testi-card:hover,
+.contact-card:hover,
+.package-card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .service-card::before {
@@ -616,7 +652,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   border: 1px solid var(--border-gold);
   display: grid;
   place-items: center;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-size: 1.4rem;
   margin-bottom: 20px;
   transition: transform 0.3s, background 0.3s;
@@ -624,7 +660,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .service-card:hover .service-icon {
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #0a0e17;
+  color: var(--on-gold);
   transform: scale(1.08) rotate(-3deg);
 }
 
@@ -664,7 +700,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   position: relative;
   height: 230px;
   overflow: hidden;
-  background: #0a0e17;
+  background: var(--surface);
 }
 
 .fleet-img img {
@@ -695,7 +731,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   padding: 6px 14px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #0a0e17;
+  color: var(--on-gold);
   font-size: 0.72rem;
   font-weight: 700;
 }
@@ -744,7 +780,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .rate-table thead {
   background: linear-gradient(135deg, var(--gold-light), var(--gold) 50%, var(--gold-dark));
-  color: #0a0e17;
+  color: var(--on-gold);
 }
 
 .rate-table th {
@@ -768,7 +804,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .rate-table td i { color: var(--gold); margin-right: 8px; }
 
 .rate-table .rate {
-  color: var(--gold);
+  color: var(--gold-dark);
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
@@ -797,7 +833,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: clamp(200px, 40vw, 400px);
-  color: rgba(245, 197, 24, 0.03);
+  color: rgba(180, 83, 9, 0.05);
   pointer-events: none;
   font-family: serif;
 }
@@ -860,7 +896,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   border: 1px solid var(--border-gold);
   display: grid;
   place-items: center;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-size: 1.2rem;
   font-style: normal;
 }
@@ -877,7 +913,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   justify-content: space-between;
   align-items: center;
   padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--card-tint);
   border: 1px solid var(--border);
   border-radius: 12px;
 }
@@ -918,7 +954,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 }
 
 .tour-places li:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--card-tint);
   border-color: var(--border);
 }
 
@@ -929,7 +965,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   border: 1px solid var(--border-gold);
   display: grid;
   place-items: center;
-  color: var(--gold);
+  color: var(--gold-dark);
   flex-shrink: 0;
 }
 
@@ -972,7 +1008,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   padding: 10px 24px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
-  color: #0a0e17;
+  color: var(--on-gold);
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.95rem;
@@ -1024,7 +1060,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.88rem;
-  color: var(--gold);
+  color: var(--gold-dark);
   margin-bottom: 4px;
 }
 
@@ -1075,7 +1111,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   content: '✓';
   position: absolute;
   left: 0;
-  color: var(--gold);
+  color: var(--gold-dark);
   font-weight: 700;
 }
 
@@ -1133,7 +1169,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   gap: 12px;
   padding: 14px 28px;
   margin-bottom: 32px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pill-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   font-size: 0.95rem;
@@ -1153,7 +1189,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .package-card {
   position: relative;
   padding: 32px 24px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   transition: transform 0.3s var(--ease), border-color 0.3s;
@@ -1166,7 +1202,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .package-card.featured {
   border-color: var(--border-gold);
-  background: linear-gradient(135deg, rgba(245, 197, 24, 0.12), rgba(0, 0, 0, 0.25));
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(255, 255, 255, 0.9));
   box-shadow: var(--shadow-gold);
 }
 
@@ -1186,7 +1222,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--gold);
+  color: var(--gold-dark);
   line-height: 1.1;
   margin-bottom: 8px;
 }
@@ -1204,7 +1240,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   transform: translateX(-50%);
   padding: 5px 14px;
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
-  color: #0a0e17;
+  color: var(--on-gold);
   font-family: var(--font-display);
   font-size: 0.72rem;
   font-weight: 800;
@@ -1234,7 +1270,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   gap: 16px;
   align-items: flex-start;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--card-tint);
   border: 1px solid var(--border);
   border-radius: 14px;
   transition: border-color 0.25s;
@@ -1247,7 +1283,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   border-radius: 12px;
   background: linear-gradient(135deg, rgba(245, 197, 24, 0.12), transparent);
   border: 1px solid var(--border-gold);
-  color: var(--gold);
+  color: var(--gold-dark);
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -1290,7 +1326,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   padding: 14px 16px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--input-bg);
   color: var(--text);
   font-family: var(--font-body);
   font-size: 0.95rem;
@@ -1363,7 +1399,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   width: 48px; height: 48px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
-  color: #0a0e17;
+  color: var(--on-gold);
   display: grid;
   place-items: center;
   font-family: var(--font-display);
@@ -1433,7 +1469,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(245, 197, 24, 0.12), transparent);
   border: 1px solid var(--border-gold);
-  color: var(--gold);
+  color: var(--gold-dark);
   display: grid;
   place-items: center;
   font-size: 1.25rem;
@@ -1455,7 +1491,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 /* ── Footer ── */
 .footer {
-  background: #030508;
+  background: var(--footer-bg);
   padding-top: 72px;
   border-top: 1px solid var(--border);
 }
@@ -1492,7 +1528,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .socials a {
   width: 40px; height: 40px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--pill-bg);
   border: 1px solid var(--border);
   display: grid;
   place-items: center;
@@ -1503,7 +1539,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .socials a:hover {
   background: var(--gold);
   border-color: var(--gold);
-  color: #0a0e17;
+  color: var(--on-gold);
   transform: translateY(-3px);
 }
 
@@ -1532,7 +1568,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .float-call {
   bottom: 92px;
   background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #0a0e17;
+  color: var(--on-gold);
 }
 
 .float-wa {
@@ -1585,7 +1621,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
     left: 16px; right: 16px;
     flex-direction: column;
     padding: 20px;
-    background: rgba(6, 10, 18, 0.97);
+    background: var(--nav-mobile);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     backdrop-filter: blur(24px);
