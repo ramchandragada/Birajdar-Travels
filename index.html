@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Birajdar Travels | Reliable Taxi Rentals & Travel Services in Solapur</title>
 <meta name="description" content="Birajdar Travels offers affordable and reliable taxi services in Solapur. Daily rentals, outstation trips, airport transfers, and corporate travel. Book now!" />
 <meta name="keywords" content="Solapur taxi, taxi service Solapur, car rental Solapur, Solapur airport taxi, outstation cabs Solapur, Birajdar Travels, cab booking Solapur" />
@@ -17,9 +17,11 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%95%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200&q=80" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="styles.css?v=20260711" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+<link rel="stylesheet" href="styles.css?v=20260711b" />
 </head>
 <body>
 <div class="bg-mesh" aria-hidden="true">
@@ -48,11 +50,12 @@
     <a href="tel:+919322613925" class="btn btn-primary nav-cta">
       <i class="fa-solid fa-phone"></i> Call Now
     </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
       <i class="fa-solid fa-bars"></i>
     </button>
   </div>
 </header>
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 
 <!-- Hero -->
 <section class="hero" id="home">
@@ -275,6 +278,7 @@
           </tr>
         </tbody>
       </table>
+      <p class="rate-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Swipe to see all columns</p>
     </div>
     <p class="rate-note"><i class="fa-solid fa-circle-info"></i> Driver charges, tolls & parking may apply for outstation trips. Contact us for custom packages.</p>
   </div>
@@ -944,10 +948,10 @@
   <i class="fa-brands fa-whatsapp"></i>
 </a>
 
-<script src="js/config.js?v=20260711"></script>
-<script src="js/booking-engine.js?v=20260711"></script>
-<script src="js/booking-api.js?v=20260711"></script>
-<script src="js/booking-ui.js?v=20260711"></script>
-<script src="script.js?v=20260711"></script>
+<script src="js/config.js?v=20260711b"></script>
+<script src="js/booking-engine.js?v=20260711b"></script>
+<script src="js/booking-api.js?v=20260711b"></script>
+<script src="js/booking-ui.js?v=20260711b"></script>
+<script src="script.js?v=20260711b"></script>
 </body>
 </html>

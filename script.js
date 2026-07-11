@@ -1,7 +1,9 @@
 // Navbar scroll effect
 const navbar = document.getElementById('navbar');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
+  navbar?.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
 // Active nav link on scroll
@@ -24,27 +26,47 @@ function setActiveNav() {
 window.addEventListener('scroll', setActiveNav, { passive: true });
 setActiveNav();
 
-// Mobile menu toggle
+// Mobile menu
 const menuToggle = document.getElementById('menuToggle');
 const navLinksEl = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
 
-menuToggle.addEventListener('click', () => {
-  navLinksEl.classList.toggle('open');
+function setMenuOpen(open) {
+  if (!navLinksEl || !menuToggle) return;
+  navLinksEl.classList.toggle('open', open);
+  navOverlay?.classList.toggle('visible', open);
+  document.body.classList.toggle('nav-open', open);
+  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   const icon = menuToggle.querySelector('i');
-  icon.classList.toggle('fa-bars');
-  icon.classList.toggle('fa-xmark');
+  if (icon) {
+    icon.classList.toggle('fa-bars', !open);
+    icon.classList.toggle('fa-xmark', open);
+  }
+}
+
+function closeMenu() {
+  setMenuOpen(false);
+}
+
+menuToggle?.addEventListener('click', () => {
+  setMenuOpen(!navLinksEl.classList.contains('open'));
 });
 
+navOverlay?.addEventListener('click', closeMenu);
+
 document.querySelectorAll('.nav-link').forEach(a =>
-  a.addEventListener('click', () => {
-    navLinksEl.classList.remove('open');
-    menuToggle.querySelector('i').classList.add('fa-bars');
-    menuToggle.querySelector('i').classList.remove('fa-xmark');
-  })
+  a.addEventListener('click', closeMenu)
 );
 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && navLinksEl?.classList.contains('open')) {
+    closeMenu();
+  }
+});
+
 // Footer year
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // Scroll reveal with stagger
 const revealEls = document.querySelectorAll(
@@ -55,22 +77,26 @@ const revealEls = document.querySelectorAll(
   '.vehicle-allocation, .children-policy'
 );
 
-revealEls.forEach((el, i) => {
-  el.classList.add('reveal');
-  if (i % 3 === 1) el.classList.add('reveal-delay-1');
-  if (i % 3 === 2) el.classList.add('reveal-delay-2');
-});
-
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      io.unobserve(entry.target);
-    }
+if (prefersReducedMotion) {
+  revealEls.forEach(el => el.classList.add('visible'));
+} else {
+  revealEls.forEach((el, i) => {
+    el.classList.add('reveal');
+    if (i % 3 === 1) el.classList.add('reveal-delay-1');
+    if (i % 3 === 2) el.classList.add('reveal-delay-2');
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-revealEls.forEach(el => io.observe(el));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => io.observe(el));
+}
 
 // Spiritual tour city tabs → prefill booking wizard
 const cityMap = {

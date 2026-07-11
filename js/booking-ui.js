@@ -294,6 +294,12 @@
       bindLivePriceListeners();
       refreshLivePrice();
     }
+
+    const bookSection = document.getElementById('book');
+    if (bookSection && window.matchMedia('(max-width: 768px)').matches) {
+      const top = bookSection.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   }
 
   async function submitBooking() {
