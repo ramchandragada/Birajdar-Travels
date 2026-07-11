@@ -1382,6 +1382,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 .vehicle-allocation h4 i,
 .children-policy h4 i { color: var(--gold); }
 
+.vehicle-allocation-note {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: -8px 0 16px;
+  line-height: 1.5;
+}
+
 .vehicle-table {
   width: 100%;
   border-collapse: collapse;

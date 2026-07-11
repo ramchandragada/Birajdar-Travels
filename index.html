@@ -528,7 +528,8 @@
         </div>
 
         <div class="vehicle-allocation reveal">
-          <h4><i class="fa-solid fa-car"></i> Vehicle Provided by Group Size</h4>
+          <h4><i class="fa-solid fa-car"></i> Vehicle Options by Group Size</h4>
+          <p class="vehicle-allocation-note">Default vehicle included in package price. Upgrade to a larger car during online booking — price updates automatically.</p>
           <table class="vehicle-table">
             <thead>
               <tr>
@@ -709,6 +710,17 @@
               <div class="form-group">
                 <label for="bkChildFree">Children (0–5 yrs)</label>
                 <input type="number" id="bkChildFree" min="0" max="6" value="0" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bkTourVehicle">Choose Vehicle</label>
+                <select id="bkTourVehicle">
+                  <option value="hatchback">Hatchback — Maruti Baleno — ₹20,000 (recommended)</option>
+                  <option value="sedan">Sedan — Tata Tigor — ₹22,000</option>
+                  <option value="innova">Innova — Toyota Innova Crysta — ₹26,000</option>
+                </select>
+                <p class="form-hint"><i class="fa-solid fa-car"></i> Default vehicle shown for your group — upgrade anytime; price updates instantly.</p>
               </div>
             </div>
             <p class="form-hint"><i class="fa-solid fa-circle-info"></i> Reach Solapur early morning before Day 1. Train/bus tickets booked separately.</p>

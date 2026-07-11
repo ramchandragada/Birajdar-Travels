@@ -14,6 +14,7 @@
     adults: 2,
     childHalf: 0,
     childFree: 0,
+    tourVehicle: 'hatchback',
     vehicle: 'Maruti Baleno',
     estimatedKm: '',
     customerName: '',
@@ -54,6 +55,7 @@
     els.adults = $('bkAdults');
     els.childHalf = $('bkChildHalf');
     els.childFree = $('bkChildFree');
+    els.tourVehicle = $('bkTourVehicle');
     els.vehicle = $('bkVehicle');
     els.estimatedKm = $('bkEstimatedKm');
     els.customerName = $('bkName');
@@ -94,6 +96,7 @@
     state.adults = parseInt(els.adults?.value || '2', 10);
     state.childHalf = parseInt(els.childHalf?.value || '0', 10);
     state.childFree = parseInt(els.childFree?.value || '0', 10);
+    state.tourVehicle = els.tourVehicle?.value || state.tourVehicle;
     state.vehicle = els.vehicle?.value || '';
     state.estimatedKm = els.estimatedKm?.value || '';
     state.customerName = els.customerName?.value || '';
@@ -111,6 +114,8 @@
     if (els.adults) els.adults.value = state.adults;
     if (els.childHalf) els.childHalf.value = state.childHalf;
     if (els.childFree) els.childFree.value = state.childFree;
+    updateTourVehicleOptions();
+    if (els.tourVehicle) els.tourVehicle.value = state.tourVehicle;
     if (els.vehicle) els.vehicle.value = state.vehicle;
     if (els.estimatedKm) els.estimatedKm.value = state.estimatedKm;
     if (els.customerName) els.customerName.value = state.customerName;
@@ -133,6 +138,30 @@
     if (els.taxiFields) els.taxiFields.hidden = isTour;
   }
 
+  function updateTourVehicleOptions() {
+    if (!els.tourVehicle || !BT()) return;
+
+    const { getAdultPricingTier, getAvailableTourVehicles, resolveTourVehicle,
+      TOUR_VEHICLES, TOUR_VEHICLE_PRICES, formatINR } = BT();
+
+    const tier = getAdultPricingTier(state.adults);
+    const seatCount = state.adults + state.childHalf;
+    const available = getAvailableTourVehicles(tier, seatCount);
+    const prices = TOUR_VEHICLE_PRICES[tier];
+
+    state.tourVehicle = resolveTourVehicle(tier, seatCount, state.tourVehicle);
+
+    els.tourVehicle.innerHTML = available.map(id => {
+      const v = TOUR_VEHICLES[id];
+      const price = prices[id];
+      const isDefault = id === BT().getDefaultVehicleId(tier);
+      const defaultTag = isDefault ? ' (recommended)' : '';
+      return `<option value="${id}">${v.label} — ${formatINR(price)}${defaultTag}</option>`;
+    }).join('');
+
+    els.tourVehicle.value = state.tourVehicle;
+  }
+
   function updateLivePrice() {
     if (!els.livePrice || !BT()) return;
     const { estimateTourPrice, formatINR } = BT();
@@ -141,11 +170,22 @@
       els.livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
       return;
     }
-    const q = estimateTourPrice(state.adults, state.childHalf);
-    let html = `<div class="bk-price-row"><span>Package (${q.tier} adults tier)</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+
+    const q = estimateTourPrice(state.adults, state.childHalf, state.tourVehicle);
+    state.tourVehicle = q.vehicleId;
+
+    let html = `<div class="bk-price-row"><span>Package (${q.tier} travellers)</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+
+    if (q.vehicleUpgrade > 0) {
+      html += `<div class="bk-price-row"><span>Vehicle upgrade</span><strong>+${formatINR(q.vehicleUpgrade)}</strong></div>`;
+    } else if (q.vehicleUpgrade < 0) {
+      html += `<div class="bk-price-row"><span>Vehicle adjustment</span><strong>${formatINR(q.vehicleUpgrade)}</strong></div>`;
+    }
+
     if (state.childHalf > 0) {
       html += `<div class="bk-price-row"><span>Children 5–12 (${state.childHalf} × 50%)</span><strong>${formatINR(q.childHalfCharge)}</strong></div>`;
     }
+
     html += `<div class="bk-price-row total"><span>Estimated total</span><strong>${formatINR(q.estimatedTotal)}</strong></div>`;
     html += `<p class="bk-price-meta"><i class="fa-solid fa-car"></i> ${q.vehicle}</p>`;
     els.livePrice.innerHTML = html;
@@ -165,7 +205,7 @@
     if (state.customerEmail) rows.push(['Email', state.customerEmail]);
 
     if (state.serviceType === 'spiritual') {
-      const q = estimateTourPrice(state.adults, state.childHalf);
+      const q = estimateTourPrice(state.adults, state.childHalf, state.tourVehicle);
       rows.push(['Traveling from', state.travelingFrom]);
       rows.push(['Adults', state.adults]);
       if (state.childHalf) rows.push(['Children (5–12)', state.childHalf]);
@@ -259,6 +299,9 @@
       els.wizard.addEventListener(evt, (e) => {
         if (e.target.matches('input, select, textarea')) {
           readFormState();
+          if (e.target.id === 'bkAdults' || e.target.id === 'bkChildHalf') {
+            updateTourVehicleOptions();
+          }
           updateLivePrice();
         }
       });

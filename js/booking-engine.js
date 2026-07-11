@@ -3,11 +3,41 @@
  */
 (function (global) {
   const TOUR_PACKAGES = {
-    2: { total: 20000, perPerson: 10000, vehicle: 'Hatchback (Maruti Baleno)' },
-    3: { total: 25500, perPerson: 8500, vehicle: 'Hatchback (Maruti Baleno)' },
-    4: { total: 30000, perPerson: 7500, vehicle: 'Sedan (Tata Tigor)' },
-    5: { total: 32500, perPerson: 6500, vehicle: 'Innova (Toyota Innova Crysta)' },
-    6: { total: 36000, perPerson: 6000, vehicle: 'Innova (Toyota Innova Crysta)' }
+    2: { total: 20000, perPerson: 10000, defaultVehicle: 'hatchback' },
+    3: { total: 25500, perPerson: 8500, defaultVehicle: 'hatchback' },
+    4: { total: 30000, perPerson: 7500, defaultVehicle: 'sedan' },
+    5: { total: 32500, perPerson: 6500, defaultVehicle: 'innova' },
+    6: { total: 36000, perPerson: 6000, defaultVehicle: 'innova' }
+  };
+
+  /** Full package price per tier + vehicle (500 km tour) */
+  const TOUR_VEHICLE_PRICES = {
+    2: { hatchback: 20000, sedan: 22000, innova: 26000 },
+    3: { hatchback: 25500, sedan: 27500, innova: 31500 },
+    4: { hatchback: null, sedan: 30000, innova: 33500 },
+    5: { hatchback: null, sedan: null, innova: 32500 },
+    6: { hatchback: null, sedan: null, innova: 36000 }
+  };
+
+  const TOUR_VEHICLES = {
+    hatchback: {
+      id: 'hatchback',
+      label: 'Hatchback — Maruti Baleno',
+      shortLabel: 'Hatchback (Maruti Baleno)',
+      maxSeats: 3
+    },
+    sedan: {
+      id: 'sedan',
+      label: 'Sedan — Tata Tigor',
+      shortLabel: 'Sedan (Tata Tigor)',
+      maxSeats: 4
+    },
+    innova: {
+      id: 'innova',
+      label: 'Innova — Toyota Innova Crysta',
+      shortLabel: 'Innova (Toyota Innova Crysta)',
+      maxSeats: 6
+    }
   };
 
   const FLEET_RATES = {
@@ -43,29 +73,58 @@
     }
   };
 
-  function getVehicle(seatCount) {
-    if (seatCount <= 3) return 'Hatchback (Maruti Baleno)';
-    if (seatCount === 4) return 'Sedan (Tata Tigor)';
-    return 'Innova (Toyota Innova Crysta)';
+  function getDefaultVehicleId(tier) {
+    return TOUR_PACKAGES[tier]?.defaultVehicle || 'hatchback';
+  }
+
+  function getVehicleLabel(vehicleId) {
+    return TOUR_VEHICLES[vehicleId]?.shortLabel || vehicleId;
+  }
+
+  function getAvailableTourVehicles(tier, seatCount) {
+    const prices = TOUR_VEHICLE_PRICES[tier] || {};
+    return Object.keys(TOUR_VEHICLES).filter(id => {
+      if (prices[id] == null) return false;
+      return TOUR_VEHICLES[id].maxSeats >= seatCount;
+    });
+  }
+
+  function resolveTourVehicle(tier, seatCount, requestedId) {
+    const available = getAvailableTourVehicles(tier, seatCount);
+    const defaultId = getDefaultVehicleId(tier);
+    if (requestedId && available.includes(requestedId)) return requestedId;
+    if (available.includes(defaultId)) return defaultId;
+    return available[0] || defaultId;
   }
 
   function getAdultPricingTier(adults) {
     return Math.max(2, Math.min(6, adults));
   }
 
-  function estimateTourPrice(adults, childHalf) {
+  function estimateTourPrice(adults, childHalf, tourVehicleId) {
     const tier = getAdultPricingTier(adults);
     const pkg = TOUR_PACKAGES[tier];
-    const halfPerChild = Math.round(pkg.perPerson / 2);
     const seatCount = adults + childHalf;
+    const vehicleId = resolveTourVehicle(tier, seatCount, tourVehicleId);
+    const prices = TOUR_VEHICLE_PRICES[tier];
+    const baseTotal = prices[vehicleId] ?? pkg.total;
+    const defaultId = getDefaultVehicleId(tier);
+    const vehicleUpgrade = baseTotal - (prices[defaultId] ?? pkg.total);
+    const halfPerChild = Math.round(pkg.perPerson / 2);
+
     return {
       tier,
       seatCount,
-      vehicle: getVehicle(seatCount),
+      vehicleId,
+      vehicle: getVehicleLabel(vehicleId),
+      defaultVehicleId: defaultId,
+      defaultVehicle: getVehicleLabel(defaultId),
       perPerson: pkg.perPerson,
-      baseTotal: pkg.total,
+      baseTotal,
+      vehicleUpgrade,
       childHalfCharge: childHalf * halfPerChild,
-      estimatedTotal: pkg.total + childHalf * halfPerChild
+      estimatedTotal: baseTotal + childHalf * halfPerChild,
+      availableVehicles: getAvailableTourVehicles(tier, seatCount)
     };
   }
 
@@ -127,6 +186,15 @@
         if (state.adults + state.childHalf > 6) {
           errors.push('Maximum 6 paying travellers per vehicle. Contact us for larger groups.');
         }
+        if (!state.tourVehicle) errors.push('Please select a vehicle.');
+        else {
+          const tier = getAdultPricingTier(state.adults);
+          const seats = state.adults + state.childHalf;
+          const available = getAvailableTourVehicles(tier, seats);
+          if (!available.includes(state.tourVehicle)) {
+            errors.push('Selected vehicle cannot fit your group size. Please choose another option.');
+          }
+        }
       } else {
         if (!state.pickup?.trim()) errors.push('Pickup location is required.');
         if (!state.drop?.trim()) errors.push('Drop location is required.');
@@ -175,11 +243,13 @@
     };
 
     if (state.serviceType === 'spiritual') {
-      const quote = estimateTourPrice(payload.adults, payload.childHalf);
+      const quote = estimateTourPrice(payload.adults, payload.childHalf, state.tourVehicle);
+      payload.tourVehicle = quote.vehicleId;
       payload.vehicle = quote.vehicle;
       payload.pricingTier = quote.tier;
       payload.perPerson = quote.perPerson;
       payload.baseTotal = quote.baseTotal;
+      payload.vehicleUpgrade = quote.vehicleUpgrade;
       payload.childHalfCharge = quote.childHalfCharge;
       payload.estimatedTotal = quote.estimatedTotal;
       payload.pickup = payload.pickup || `Solapur Junction (arriving from ${payload.travelingFrom})`;
@@ -194,9 +264,15 @@
 
   global.BTBooking = {
     TOUR_PACKAGES,
+    TOUR_VEHICLES,
+    TOUR_VEHICLE_PRICES,
     FLEET_RATES,
     SERVICE_TYPES,
     estimateTourPrice,
+    getDefaultVehicleId,
+    getAvailableTourVehicles,
+    resolveTourVehicle,
+    getVehicleLabel,
     generateBookingRef,
     formatINR,
     formatDate,
