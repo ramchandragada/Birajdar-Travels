@@ -114,7 +114,7 @@
     if (els.adults) els.adults.value = state.adults;
     if (els.childHalf) els.childHalf.value = state.childHalf;
     if (els.childFree) els.childFree.value = state.childFree;
-    updateTourVehicleOptions();
+    updateTourVehicleOptions(true);
     if (els.tourVehicle) els.tourVehicle.value = state.tourVehicle;
     if (els.vehicle) els.vehicle.value = state.vehicle;
     if (els.estimatedKm) els.estimatedKm.value = state.estimatedKm;
@@ -138,7 +138,7 @@
     if (els.taxiFields) els.taxiFields.hidden = isTour;
   }
 
-  function updateTourVehicleOptions() {
+  function updateTourVehicleOptions(preserveSelection) {
     if (!els.tourVehicle || !BT()) return;
 
     const { getAdultPricingTier, getAvailableTourVehicles, resolveTourVehicle,
@@ -149,7 +149,11 @@
     const available = getAvailableTourVehicles(tier, seatCount);
     const prices = TOUR_VEHICLE_PRICES[tier];
 
-    state.tourVehicle = resolveTourVehicle(tier, seatCount, state.tourVehicle);
+    const currentSelection = preserveSelection
+      ? (els.tourVehicle.value || state.tourVehicle)
+      : state.tourVehicle;
+
+    state.tourVehicle = resolveTourVehicle(tier, seatCount, currentSelection);
 
     els.tourVehicle.innerHTML = available.map(id => {
       const v = TOUR_VEHICLES[id];
@@ -164,22 +168,31 @@
 
   function updateLivePrice() {
     if (!els.livePrice || !BT()) return;
-    const { estimateTourPrice, formatINR } = BT();
+
+    readFormState();
+
+    const { estimateTourPrice, formatINR, getDefaultVehicleId } = BT();
 
     if (state.serviceType !== 'spiritual') {
       els.livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
       return;
     }
 
-    const q = estimateTourPrice(state.adults, state.childHalf, state.tourVehicle);
+    const selectedVehicle = els.tourVehicle?.value || state.tourVehicle;
+    const q = estimateTourPrice(state.adults, state.childHalf, selectedVehicle);
     state.tourVehicle = q.vehicleId;
 
-    let html = `<div class="bk-price-row"><span>Package (${q.tier} travellers)</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+    if (els.tourVehicle && els.tourVehicle.value !== q.vehicleId) {
+      els.tourVehicle.value = q.vehicleId;
+    }
 
-    if (q.vehicleUpgrade > 0) {
-      html += `<div class="bk-price-row"><span>Vehicle upgrade</span><strong>+${formatINR(q.vehicleUpgrade)}</strong></div>`;
-    } else if (q.vehicleUpgrade < 0) {
-      html += `<div class="bk-price-row"><span>Vehicle adjustment</span><strong>${formatINR(q.vehicleUpgrade)}</strong></div>`;
+    const defaultId = getDefaultVehicleId(q.tier);
+    const isUpgrade = q.vehicleId !== defaultId;
+
+    let html = `<div class="bk-price-row"><span>${q.vehicle} · ${q.tier} travellers</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+
+    if (isUpgrade && q.vehicleUpgrade > 0) {
+      html += `<div class="bk-price-row"><span>Upgrade from ${q.defaultVehicle}</span><strong>+${formatINR(q.vehicleUpgrade)}</strong></div>`;
     }
 
     if (state.childHalf > 0) {
@@ -187,7 +200,6 @@
     }
 
     html += `<div class="bk-price-row total"><span>Estimated total</span><strong>${formatINR(q.estimatedTotal)}</strong></div>`;
-    html += `<p class="bk-price-meta"><i class="fa-solid fa-car"></i> ${q.vehicle}</p>`;
     els.livePrice.innerHTML = html;
   }
 
@@ -298,13 +310,32 @@
     ['input', 'change'].forEach(evt => {
       els.wizard.addEventListener(evt, (e) => {
         if (e.target.matches('input, select, textarea')) {
-          readFormState();
           if (e.target.id === 'bkAdults' || e.target.id === 'bkChildHalf') {
-            updateTourVehicleOptions();
+            readFormState();
+            updateTourVehicleOptions(true);
+          } else {
+            readFormState();
           }
           updateLivePrice();
         }
       });
+    });
+
+    els.tourVehicle?.addEventListener('change', () => {
+      readFormState();
+      updateLivePrice();
+    });
+
+    els.adults?.addEventListener('input', () => {
+      readFormState();
+      updateTourVehicleOptions(true);
+      updateLivePrice();
+    });
+
+    els.childHalf?.addEventListener('input', () => {
+      readFormState();
+      updateTourVehicleOptions(true);
+      updateLivePrice();
     });
 
     els.btnPrev?.addEventListener('click', () => goToStep(currentStep - 1));
