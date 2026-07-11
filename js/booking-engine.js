@@ -128,6 +128,37 @@
     };
   }
 
+  function renderLivePriceSidebar(containerEl, opts) {
+    if (!containerEl) return null;
+
+    const adults = opts.adults ?? 2;
+    const childHalf = opts.childHalf ?? 0;
+    const childFree = opts.childFree ?? 0;
+    const vehicleId = opts.vehicleId || opts.tourVehicleId || getDefaultVehicleId(getAdultPricingTier(adults));
+
+    const q = estimateTourPrice(adults, childHalf, vehicleId);
+    const isUpgrade = q.vehicleId !== q.defaultVehicleId;
+
+    let html = `<div class="bk-price-row"><span>${q.vehicle} · ${q.tier} travellers</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+
+    if (isUpgrade && q.vehicleUpgrade > 0) {
+      html += `<div class="bk-price-row"><span>Upgrade from ${q.defaultVehicle}</span><strong>+${formatINR(q.vehicleUpgrade)}</strong></div>`;
+    }
+
+    if (childHalf > 0) {
+      html += `<div class="bk-price-row"><span>Children 5–12 (${childHalf} × 50%)</span><strong>${formatINR(q.childHalfCharge)}</strong></div>`;
+    }
+
+    if (childFree > 0) {
+      html += `<div class="bk-price-row"><span>Children 0–5 (${childFree})</span><strong>Free</strong></div>`;
+    }
+
+    html += `<div class="bk-price-row total"><span>Estimated total</span><strong>${formatINR(q.estimatedTotal)}</strong></div>`;
+
+    containerEl.innerHTML = html;
+    return q;
+  }
+
   function generateBookingRef() {
     const prefix = global.BT_CONFIG?.bookingPrefix || 'BT';
     const d = new Date();
@@ -269,6 +300,7 @@
     FLEET_RATES,
     SERVICE_TYPES,
     estimateTourPrice,
+    renderLivePriceSidebar,
     getDefaultVehicleId,
     getAvailableTourVehicles,
     resolveTourVehicle,

@@ -166,41 +166,58 @@
     els.tourVehicle.value = state.tourVehicle;
   }
 
-  function updateLivePrice() {
-    if (!els.livePrice || !BT()) return;
+  function refreshLivePrice() {
+    const livePrice = document.getElementById('bkLivePrice');
+    if (!livePrice || !BT()) return null;
 
     readFormState();
 
-    const { estimateTourPrice, formatINR, getDefaultVehicleId } = BT();
-
     if (state.serviceType !== 'spiritual') {
-      els.livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
-      return;
+      livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
+      return null;
     }
 
-    const selectedVehicle = els.tourVehicle?.value || state.tourVehicle;
-    const q = estimateTourPrice(state.adults, state.childHalf, selectedVehicle);
-    state.tourVehicle = q.vehicleId;
+    const vehicleEl = document.getElementById('bkTourVehicle');
+    const vehicleId = vehicleEl?.value || state.tourVehicle;
 
-    if (els.tourVehicle && els.tourVehicle.value !== q.vehicleId) {
-      els.tourVehicle.value = q.vehicleId;
-    }
+    const q = BT().renderLivePriceSidebar(livePrice, {
+      adults: state.adults,
+      childHalf: state.childHalf,
+      childFree: state.childFree,
+      vehicleId
+    });
 
-    const defaultId = getDefaultVehicleId(q.tier);
-    const isUpgrade = q.vehicleId !== defaultId;
+    if (q) state.tourVehicle = q.vehicleId;
+    return q;
+  }
 
-    let html = `<div class="bk-price-row"><span>${q.vehicle} · ${q.tier} travellers</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+  function updateLivePrice() {
+    refreshLivePrice();
+  }
 
-    if (isUpgrade && q.vehicleUpgrade > 0) {
-      html += `<div class="bk-price-row"><span>Upgrade from ${q.defaultVehicle}</span><strong>+${formatINR(q.vehicleUpgrade)}</strong></div>`;
-    }
-
-    if (state.childHalf > 0) {
-      html += `<div class="bk-price-row"><span>Children 5–12 (${state.childHalf} × 50%)</span><strong>${formatINR(q.childHalfCharge)}</strong></div>`;
-    }
-
-    html += `<div class="bk-price-row total"><span>Estimated total</span><strong>${formatINR(q.estimatedTotal)}</strong></div>`;
-    els.livePrice.innerHTML = html;
+  function bindLivePriceListeners() {
+    const ids = ['bkTourVehicle', 'bkAdults', 'bkChildHalf', 'bkChildFree'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el || el.dataset.priceBound) return;
+      el.dataset.priceBound = '1';
+      el.addEventListener('change', () => {
+        if (id === 'bkAdults' || id === 'bkChildHalf') {
+          readFormState();
+          updateTourVehicleOptions(true);
+        } else {
+          readFormState();
+        }
+        refreshLivePrice();
+      });
+      el.addEventListener('input', () => {
+        if (id === 'bkAdults' || id === 'bkChildHalf' || id === 'bkChildFree') {
+          readFormState();
+          if (id === 'bkAdults' || id === 'bkChildHalf') updateTourVehicleOptions(true);
+          refreshLivePrice();
+        }
+      });
+    });
   }
 
   function buildReviewHTML() {
@@ -273,7 +290,9 @@
     if (currentStep === 2) {
       readFormState();
       toggleServiceFields();
-      updateLivePrice();
+      updateTourVehicleOptions(true);
+      bindLivePriceListeners();
+      refreshLivePrice();
     }
   }
 
@@ -323,20 +342,22 @@
 
     els.tourVehicle?.addEventListener('change', () => {
       readFormState();
-      updateLivePrice();
+      refreshLivePrice();
     });
 
     els.adults?.addEventListener('input', () => {
       readFormState();
       updateTourVehicleOptions(true);
-      updateLivePrice();
+      refreshLivePrice();
     });
 
     els.childHalf?.addEventListener('input', () => {
       readFormState();
       updateTourVehicleOptions(true);
-      updateLivePrice();
+      refreshLivePrice();
     });
+
+    bindLivePriceListeners();
 
     els.btnPrev?.addEventListener('click', () => goToStep(currentStep - 1));
 
