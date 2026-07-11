@@ -2,8 +2,6 @@
  * Birajdar Travels — Multi-step booking wizard UI
  */
 (function () {
-  const { SERVICE_TYPES, validateStep, buildBookingPayload, estimateTourPrice, formatINR, formatDate } = window.BTBooking;
-
   let currentStep = 1;
   const totalSteps = 4;
 
@@ -26,6 +24,10 @@
   };
 
   const els = {};
+
+  function BT() {
+    return window.BTBooking;
+  }
 
   function $(id) { return document.getElementById(id); }
 
@@ -63,6 +65,13 @@
     els.tourFields = $('bkTourFields');
     els.taxiFields = $('bkTaxiFields');
     return true;
+  }
+
+  function setBtnVisible(btn, visible) {
+    if (!btn) return;
+    btn.hidden = !visible;
+    btn.classList.toggle('is-hidden', !visible);
+    btn.style.display = visible ? '' : 'none';
   }
 
   function showErrors(messages) {
@@ -125,7 +134,9 @@
   }
 
   function updateLivePrice() {
-    if (!els.livePrice) return;
+    if (!els.livePrice || !BT()) return;
+    const { estimateTourPrice, formatINR } = BT();
+
     if (state.serviceType !== 'spiritual') {
       els.livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
       return;
@@ -142,6 +153,8 @@
 
   function buildReviewHTML() {
     readFormState();
+    const { SERVICE_TYPES, estimateTourPrice, formatINR, formatDate } = BT();
+
     const rows = [
       ['Service', SERVICE_TYPES[state.serviceType]?.label],
       ['Travel date', formatDate(state.travelDate)],
@@ -184,7 +197,8 @@
     });
 
     els.panels?.forEach(p => {
-      p.hidden = parseInt(p.dataset.panel, 10) !== currentStep;
+      const show = parseInt(p.dataset.panel, 10) === currentStep;
+      p.hidden = !show;
     });
 
     if (els.progressFill) {
@@ -194,9 +208,9 @@
       els.stepLabel.textContent = `Step ${currentStep} of ${totalSteps}`;
     }
 
-    els.btnPrev.hidden = currentStep === 1;
-    els.btnNext.hidden = currentStep === totalSteps;
-    els.btnSubmit.hidden = currentStep !== totalSteps;
+    setBtnVisible(els.btnPrev, currentStep !== 1);
+    setBtnVisible(els.btnNext, currentStep !== totalSteps);
+    setBtnVisible(els.btnSubmit, currentStep === totalSteps);
 
     if (currentStep === totalSteps && els.reviewSummary) {
       readFormState();
@@ -213,13 +227,13 @@
 
   async function submitBooking() {
     readFormState();
-    const errors = validateStep(state, 4);
+    const errors = BT().validateStep(state, 4);
     if (errors.length) {
       showErrors(errors);
       return;
     }
 
-    const booking = buildBookingPayload(state);
+    const booking = BT().buildBookingPayload(state);
     els.btnSubmit.disabled = true;
     els.btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing booking…';
 
@@ -254,7 +268,7 @@
 
     els.btnNext?.addEventListener('click', () => {
       readFormState();
-      const errors = validateStep(state, currentStep);
+      const errors = BT().validateStep(state, currentStep);
       if (errors.length) {
         showErrors(errors);
         return;
@@ -274,11 +288,6 @@
     if (params.get('service')) state.serviceType = params.get('service');
     if (params.get('city')) state.travelingFrom = params.get('city');
     if (params.get('adults')) state.adults = parseInt(params.get('adults'), 10) || 2;
-
-    const hash = window.location.hash;
-    if (hash.includes('spiritual') || document.querySelector('[data-tour="spiritual"]:target')) {
-      state.serviceType = 'spiritual';
-    }
   }
 
   function prefillFromTourCTA() {
@@ -295,18 +304,24 @@
     });
   }
 
+  function init() {
+    if (!window.BTBooking || !window.BTBookingAPI) {
+      console.error('Booking engine scripts failed to load.');
+      return;
+    }
+    if (!cacheElements()) return;
+    prefillFromParams();
+    bindEvents();
+    syncFormFromState();
+    prefillFromTourCTA();
+    goToStep(1);
+  }
+
   window.BTBookingUI = {
-    init() {
-      if (!cacheElements()) return;
-      prefillFromParams();
-      bindEvents();
-      syncFormFromState();
-      prefillFromTourCTA();
-      goToStep(1);
-    },
+    init,
     setState(partial) {
       Object.assign(state, partial);
-      syncFormFromState();
+      if (cacheElements()) syncFormFromState();
     }
   };
 })();

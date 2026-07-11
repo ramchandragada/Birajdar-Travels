@@ -94,7 +94,13 @@ document.querySelectorAll('.city-tab').forEach(tab => {
   });
 });
 
-// Init booking engine
-document.addEventListener('DOMContentLoaded', () => {
+// Init booking engine (run immediately if DOM already loaded)
+function initBookingEngine() {
   if (window.BTBookingUI) window.BTBookingUI.init();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBookingEngine);
+} else {
+  initBookingEngine();
+}

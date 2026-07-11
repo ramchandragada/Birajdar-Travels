@@ -4,6 +4,8 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+[hidden] { display: none !important; }
+
 :root {
   --bg: #faf8f5;
   --bg-elevated: #ffffff;
@@ -2177,6 +2179,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 }
 
 .bk-nav .btn-primary { margin-left: auto; }
+
+.bk-nav .btn.is-hidden { display: none !important; }
+
+.bk-panel[hidden] { display: none !important; }
 
 /* Confirm page */
 .confirm-page {
