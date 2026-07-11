@@ -600,99 +600,194 @@
     <div class="tour-cta">
       <p>From <strong>₹6,000/person</strong> (6 travellers, Innova). Hatchback from <strong>₹10,000/person</strong> for couples.</p>
       <div class="tour-cta-btns">
-        <a href="#book" class="btn btn-primary btn-lg" data-tour="spiritual"><i class="fa-solid fa-calendar-check"></i> Book Spiritual Tour</a>
+        <a href="#book" class="btn btn-primary btn-lg" data-tour="spiritual"><i class="fa-solid fa-calendar-check"></i> Book Online</a>
         <a href="https://wa.me/919322613925?text=Hi%2C%20I%20want%20to%20book%20the%202-Day%20Spiritual%20Tour%20(Akkalkot%2C%20Gangapur%2C%20Tuljapur%2C%20Pandharpur)%20from%20my%20city." target="_blank" rel="noopener" class="btn btn-whatsapp btn-lg"><i class="fa-brands fa-whatsapp"></i> Enquire on WhatsApp</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Booking -->
+<!-- Booking Engine -->
 <section class="section booking" id="book">
-  <div class="container grid-2">
-    <div class="booking-info">
-      <span class="eyebrow">Book Your Ride</span>
-      <h2>Ready to <span class="accent">Travel?</span></h2>
-      <p>Fill in your trip details and we'll confirm your booking via phone or WhatsApp within minutes.</p>
-      <div class="booking-perks">
-        <div class="perk"><i class="fa-solid fa-bolt"></i><div><b>Instant Confirmation</b><span>Quick response by call/WhatsApp</span></div></div>
-        <div class="perk"><i class="fa-solid fa-shield-halved"></i><div><b>Safe & Secure</b><span>Verified drivers, sanitized cars</span></div></div>
-        <div class="perk"><i class="fa-solid fa-tags"></i><div><b>Best Prices</b><span>Transparent, affordable rates</span></div></div>
-      </div>
-      <div class="quick-actions">
-        <a href="tel:+919322613925" class="btn btn-dark"><i class="fa-solid fa-phone"></i> Call: +91 9322613925</a>
-        <a href="https://wa.me/919322613925" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-      </div>
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Online Booking</span>
+      <h2>Book Your <span class="accent">Trip</span></h2>
+      <p>Complete your booking in 4 easy steps. We’ll call you to confirm details — pay via UPI or bank transfer after confirmation.</p>
     </div>
 
-    <form class="booking-form" id="bookingForm">
-      <h3>Request a Booking</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fName">Full Name</label>
-          <input type="text" id="fName" name="name" placeholder="Enter your name" autocomplete="name" required />
+    <div class="booking-engine-wrap">
+      <div class="booking-sidebar">
+        <div class="booking-perks">
+          <div class="perk"><i class="fa-solid fa-bolt"></i><div><b>Quick Confirmation</b><span>We call within 2 hours</span></div></div>
+          <div class="perk"><i class="fa-solid fa-indian-rupee-sign"></i><div><b>Pay After Confirm</b><span>UPI / Bank Transfer — no card needed</span></div></div>
+          <div class="perk"><i class="fa-solid fa-shield-halved"></i><div><b>Safe & Reliable</b><span>Verified drivers, clean cars</span></div></div>
         </div>
-        <div class="form-group">
-          <label for="fPhone">Phone Number</label>
-          <input type="tel" id="fPhone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" required />
+        <div class="bk-live-price-card" id="bkLivePrice">
+          <p class="bk-price-placeholder">Select a service to see pricing</p>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fPickup">Pickup Location</label>
-          <input type="text" id="fPickup" name="pickup" placeholder="e.g. Solapur Airport" required />
-        </div>
-        <div class="form-group">
-          <label for="fDrop">Drop Location</label>
-          <input type="text" id="fDrop" name="drop" placeholder="e.g. Pune" required />
+        <div class="quick-actions">
+          <a href="tel:+919322613925" class="btn btn-dark btn-block"><i class="fa-solid fa-phone"></i> Call: +91 9322613925</a>
+          <a href="https://wa.me/919322613925" target="_blank" class="btn btn-whatsapp btn-block"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fAdults">Adults (12+ yrs)</label>
-          <input type="number" id="fAdults" name="adults" min="1" max="20" value="2" required />
+
+      <div class="booking-wizard" id="bookingWizard">
+        <div class="bk-progress">
+          <div class="bk-progress-track"><div class="bk-progress-fill" id="bkProgressFill"></div></div>
+          <div class="bk-steps">
+            <div class="bk-step active" data-step="1"><span>1</span> Service</div>
+            <div class="bk-step" data-step="2"><span>2</span> Details</div>
+            <div class="bk-step" data-step="3"><span>3</span> Contact</div>
+            <div class="bk-step" data-step="4"><span>4</span> Confirm</div>
+          </div>
+          <p class="bk-step-label" id="bkStepLabel">Step 1 of 4</p>
         </div>
-        <div class="form-group">
-          <label for="fChildHalf">Children (5–12 yrs)</label>
-          <input type="number" id="fChildHalf" name="childHalf" min="0" max="10" value="0" />
+
+        <div class="bk-errors" id="bkErrors" hidden role="alert"></div>
+
+        <!-- Step 1: Service -->
+        <div class="bk-panel" data-panel="1">
+          <h3>What would you like to book?</h3>
+          <div class="bk-service-grid">
+            <button type="button" class="bk-service-card selected" data-service="spiritual">
+              <i class="fa-solid fa-om"></i>
+              <b>Spiritual Tour</b>
+              <span>2-day package — 4 temples</span>
+            </button>
+            <button type="button" class="bk-service-card" data-service="local">
+              <i class="fa-solid fa-city"></i>
+              <b>Local Taxi</b>
+              <span>Within Solapur city</span>
+            </button>
+            <button type="button" class="bk-service-card" data-service="outstation">
+              <i class="fa-solid fa-route"></i>
+              <b>Outstation</b>
+              <span>Pune, Mumbai, Hyderabad & more</span>
+            </button>
+            <button type="button" class="bk-service-card" data-service="airport">
+              <i class="fa-solid fa-plane"></i>
+              <b>Airport Transfer</b>
+              <span>Solapur Airport pickup/drop</span>
+            </button>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="fChildFree">Children (0–5 yrs)</label>
-          <input type="number" id="fChildFree" name="childFree" min="0" max="10" value="0" />
+
+        <!-- Step 2: Details -->
+        <div class="bk-panel" data-panel="2" hidden>
+          <h3>Trip details</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bkTravelDate">Travel Date</label>
+              <input type="date" id="bkTravelDate" required />
+            </div>
+          </div>
+
+          <div id="bkTourFields">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bkTravelingFrom">Traveling From</label>
+                <select id="bkTravelingFrom">
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Nagpur">Nagpur</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Bengaluru">Bengaluru</option>
+                  <option value="Other">Other City</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row bk-row-3">
+              <div class="form-group">
+                <label for="bkAdults">Adults (12+ yrs)</label>
+                <input type="number" id="bkAdults" min="1" max="6" value="2" />
+              </div>
+              <div class="form-group">
+                <label for="bkChildHalf">Children (5–12 yrs)</label>
+                <input type="number" id="bkChildHalf" min="0" max="6" value="0" />
+              </div>
+              <div class="form-group">
+                <label for="bkChildFree">Children (0–5 yrs)</label>
+                <input type="number" id="bkChildFree" min="0" max="6" value="0" />
+              </div>
+            </div>
+            <p class="form-hint"><i class="fa-solid fa-circle-info"></i> Reach Solapur early morning before Day 1. Train/bus tickets booked separately.</p>
+          </div>
+
+          <div id="bkTaxiFields" hidden>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bkPickup">Pickup Location</label>
+                <input type="text" id="bkPickup" placeholder="e.g. Solapur Railway Station" />
+              </div>
+              <div class="form-group">
+                <label for="bkDrop">Drop Location</label>
+                <input type="text" id="bkDrop" placeholder="e.g. Pune" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bkVehicle">Vehicle</label>
+                <select id="bkVehicle">
+                  <option value="Maruti Baleno">Maruti Baleno – Hatchback (₹11/km)</option>
+                  <option value="Tata Tigor">Tata Tigor – Sedan (₹11/km)</option>
+                  <option value="Toyota Innova">Toyota Innova (₹20/km)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bkEstimatedKm">Est. Distance (km) <small>optional</small></label>
+                <input type="number" id="bkEstimatedKm" min="1" placeholder="e.g. 250" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Contact -->
+        <div class="bk-panel" data-panel="3" hidden>
+          <h3>Your contact details</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bkName">Full Name</label>
+              <input type="text" id="bkName" autocomplete="name" placeholder="Your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="bkPhone">Mobile Number</label>
+              <input type="tel" id="bkPhone" autocomplete="tel" placeholder="10-digit mobile" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bkEmail">Email <small>optional</small></label>
+              <input type="email" id="bkEmail" autocomplete="email" placeholder="For booking confirmation" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bkNotes">Special requests <small>optional</small></label>
+            <textarea id="bkNotes" rows="3" placeholder="Train arrival time, dietary needs, extra night stay, etc."></textarea>
+          </div>
+        </div>
+
+        <!-- Step 4: Review -->
+        <div class="bk-panel" data-panel="4" hidden>
+          <h3>Review & confirm</h3>
+          <div class="bk-review" id="bkReviewSummary"></div>
+          <label class="bk-terms">
+            <input type="checkbox" id="bkTerms" />
+            <span>I understand that Birajdar Travels will call me to confirm this booking. Payment is due via <strong>UPI or bank transfer</strong> after confirmation — no online payment on this website.</span>
+          </label>
+          <div class="bk-payment-preview">
+            <h4><i class="fa-solid fa-wallet"></i> Payment (after we confirm)</h4>
+            <p>UPI, NEFT, or IMPS — details shown on confirmation page.</p>
+          </div>
+        </div>
+
+        <div class="bk-nav">
+          <button type="button" class="btn btn-outline" id="bkPrev" hidden><i class="fa-solid fa-arrow-left"></i> Back</button>
+          <button type="button" class="btn btn-primary" id="bkNext">Continue <i class="fa-solid fa-arrow-right"></i></button>
+          <button type="button" class="btn btn-primary btn-lg" id="bkSubmit" hidden><i class="fa-solid fa-check"></i> Confirm Booking</button>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fDate">Travel Date</label>
-          <input type="date" id="fDate" name="date" required />
-        </div>
-        <div class="form-group">
-          <label for="fCity">Traveling From</label>
-          <select id="fCity" name="city">
-            <option value="Mumbai">Mumbai</option>
-            <option value="Pune">Pune</option>
-            <option value="Nagpur">Nagpur</option>
-            <option value="Hyderabad">Hyderabad</option>
-            <option value="Bengaluru">Bengaluru</option>
-            <option value="Other">Other City</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="fCar">Car Type / Package</label>
-          <select id="fCar" name="car">
-            <option>Spiritual Tour – 2 Day Package (2–6 persons)</option>
-            <option>Tata Tigor – ₹11/km</option>
-            <option>Maruti Baleno – ₹11/km</option>
-            <option>Toyota Innova – ₹20/km</option>
-          </select>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary btn-block btn-lg">
-        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Book via WhatsApp
-      </button>
-      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-      <p class="form-note">By submitting, you agree to be contacted about your booking.</p>
-    </form>
+    </div>
   </div>
 </section>
 
@@ -837,6 +932,10 @@
   <i class="fa-brands fa-whatsapp"></i>
 </a>
 
+<script src="js/config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script src="js/booking-api.js"></script>
+<script src="js/booking-ui.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

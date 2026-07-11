@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin — Bookings | Birajdar Travels</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#faf8f5" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="admin-page">
+<div class="admin-wrap">
+  <div class="admin-login" id="adminLogin">
+    <div class="admin-login-card">
+      <h1><i class="fa-solid fa-lock"></i> Admin Login</h1>
+      <p>Enter PIN to view bookings</p>
+      <input type="password" id="adminPinInput" placeholder="PIN" maxlength="8" />
+      <button type="button" class="btn btn-primary btn-block" id="adminLoginBtn">Login</button>
+      <p class="admin-login-err" id="adminLoginErr" hidden>Incorrect PIN</p>
+      <a href="index.html" class="admin-back">← Back to website</a>
+    </div>
+  </div>
+
+  <div class="admin-dashboard" id="adminDashboard" hidden>
+    <header class="admin-header">
+      <div>
+        <h1>Birajdar Travels — Bookings</h1>
+        <p id="adminStats">Loading…</p>
+      </div>
+      <div class="admin-header-actions">
+        <button type="button" class="btn btn-outline btn-sm" id="adminRefresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        <button type="button" class="btn btn-outline btn-sm" id="adminExport"><i class="fa-solid fa-download"></i> Export JSON</button>
+        <button type="button" class="btn btn-outline btn-sm" id="adminLogout">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-filters">
+      <input type="search" id="adminSearch" placeholder="Search by name, phone, or reference…" />
+      <select id="adminFilterStatus">
+        <option value="">All statuses</option>
+        <option value="pending_confirmation">Pending confirmation</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Travel</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+      <p class="admin-empty" id="adminEmpty" hidden>No bookings found.</p>
+    </div>
+
+    <div class="admin-detail" id="adminDetail" hidden>
+      <div class="admin-detail-inner">
+        <button type="button" class="admin-detail-close" id="adminDetailClose"><i class="fa-solid fa-xmark"></i></button>
+        <div id="adminDetailContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script src="js/booking-api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

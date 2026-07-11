@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Booking Confirmed | Birajdar Travels</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#faf8f5" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%95%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="confirm-page">
+<div class="confirm-wrap">
+  <div class="confirm-card" id="confirmCard">
+    <div class="confirm-icon"><i class="fa-solid fa-circle-check"></i></div>
+    <h1>Booking Received!</h1>
+    <p class="confirm-lead">Your request has been submitted. We will call you shortly to confirm details and share payment instructions.</p>
+
+    <div class="confirm-ref-box">
+      <span>Booking Reference</span>
+      <strong id="confirmRef">—</strong>
+      <button type="button" class="btn-copy" id="copyRef" title="Copy reference"><i class="fa-solid fa-copy"></i></button>
+    </div>
+
+    <div class="confirm-status">
+      <span class="status-pill pending"><i class="fa-solid fa-clock"></i> Pending Confirmation</span>
+      <span class="status-pill payment"><i class="fa-solid fa-wallet"></i> Payment After Confirm</span>
+    </div>
+
+    <div class="bk-review confirm-summary" id="confirmSummary"></div>
+
+    <div class="confirm-payment" id="confirmPayment">
+      <h2><i class="fa-solid fa-indian-rupee-sign"></i> Pay After We Confirm</h2>
+      <p>Once we call and confirm your booking, pay via UPI or bank transfer:</p>
+      <div class="payment-methods">
+        <div class="payment-block">
+          <h3><i class="fa-solid fa-mobile-screen"></i> UPI</h3>
+          <p><strong id="payUpiId">—</strong></p>
+          <p class="pay-name" id="payUpiName">—</p>
+        </div>
+        <div class="payment-block">
+          <h3><i class="fa-solid fa-building-columns"></i> Bank Transfer</h3>
+          <dl class="bank-details" id="bankDetails"></dl>
+        </div>
+      </div>
+      <p class="pay-note"><i class="fa-solid fa-circle-info"></i> Mention your booking reference <strong id="payRefNote">—</strong> in the UPI note or bank transfer remark.</p>
+    </div>
+
+    <div class="confirm-next">
+      <h3>What happens next?</h3>
+      <ol>
+        <li>Our team calls you within <strong>2 hours</strong> (usually sooner)</li>
+        <li>We confirm dates, travellers, vehicle & final amount</li>
+        <li>You pay via UPI or bank transfer</li>
+        <li>Booking confirmed — see you in Solapur!</li>
+      </ol>
+    </div>
+
+    <div class="confirm-actions">
+      <a href="tel:+919322613925" class="btn btn-primary"><i class="fa-solid fa-phone"></i> Call Us</a>
+      <a href="#" class="btn btn-whatsapp" id="confirmWhatsApp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+      <a href="index.html" class="btn btn-outline"><i class="fa-solid fa-home"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <div class="confirm-card confirm-error" id="confirmError" hidden>
+    <div class="confirm-icon error"><i class="fa-solid fa-circle-exclamation"></i></div>
+    <h1>Booking Not Found</h1>
+    <p>We couldn't find this booking reference. If you just placed an order, try refreshing or contact us directly.</p>
+    <a href="index.html#book" class="btn btn-primary">Book Again</a>
+    <a href="tel:+919322613925" class="btn btn-outline">Call +91 9322613925</a>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/booking-engine.js"></script>
+<script src="js/booking-api.js"></script>
+<script>
+(function () {
+  const { formatINR, formatDate } = window.BTBooking;
+  const params = new URLSearchParams(location.search);
+  const ref = params.get('ref');
+  const booking = ref ? window.BTBookingAPI.getBookingByRef(ref) : window.BTBookingAPI.getLastBooking();
+
+  const card = document.getElementById('confirmCard');
+  const err = document.getElementById('confirmError');
+
+  if (!booking) {
+    card.hidden = true;
+    err.hidden = false;
+    return;
+  }
+
+  document.getElementById('confirmRef').textContent = booking.bookingRef;
+  document.getElementById('payRefNote').textContent = booking.bookingRef;
+
+  const cfg = window.BT_CONFIG?.payment || {};
+  document.getElementById('payUpiId').textContent = cfg.upiId || 'Contact us';
+  document.getElementById('payUpiName').textContent = cfg.upiName || '';
+
+  document.getElementById('bankDetails').innerHTML = `
+    <dt>Bank</dt><dd>${cfg.bankName || '—'}</dd>
+    <dt>Account Name</dt><dd>${cfg.accountName || '—'}</dd>
+    <dt>Account No.</dt><dd>${cfg.accountNumber || '—'}</dd>
+    <dt>IFSC</dt><dd>${cfg.ifsc || '—'}</dd>
+  `;
+
+  const rows = [
+    ['Service', booking.serviceLabel],
+    ['Travel date', formatDate(booking.travelDate)],
+    ['Name', booking.customerName],
+    ['Phone', booking.customerPhone]
+  ];
+  if (booking.customerEmail) rows.push(['Email', booking.customerEmail]);
+  if (booking.serviceType === 'spiritual') {
+    rows.push(['From', booking.travelingFrom]);
+    rows.push(['Travellers', `${booking.adults} adult(s), ${booking.childHalf} child (5–12), ${booking.childFree} child (0–5)`]);
+    rows.push(['Vehicle', booking.vehicle]);
+    rows.push(['Amount', formatINR(booking.estimatedTotal)]);
+  } else {
+    rows.push(['Pickup', booking.pickup]);
+    rows.push(['Drop', booking.drop]);
+    rows.push(['Vehicle', booking.vehicle]);
+    rows.push(['Amount', booking.estimatedTotal ? formatINR(booking.estimatedTotal) : 'Confirm on call']);
+  }
+  if (booking.specialNotes) rows.push(['Notes', booking.specialNotes]);
+
+  document.getElementById('confirmSummary').innerHTML = rows.map(([k, v]) =>
+    `<div class="bk-review-row"><span>${k}</span><strong>${v}</strong></div>`
+  ).join('');
+
+  const wa = document.getElementById('confirmWhatsApp');
+  const waMsg = encodeURIComponent(
+    `Hi, I placed booking ${booking.bookingRef} for ${booking.serviceLabel} on ${formatDate(booking.travelDate)}. Please confirm.`
+  );
+  wa.href = `https://wa.me/${window.BT_CONFIG?.business?.whatsapp || '919322613925'}?text=${waMsg}`;
+
+  document.getElementById('copyRef').addEventListener('click', () => {
+    navigator.clipboard?.writeText(booking.bookingRef);
+    document.getElementById('copyRef').innerHTML = '<i class="fa-solid fa-check"></i>';
+    setTimeout(() => {
+      document.getElementById('copyRef').innerHTML = '<i class="fa-solid fa-copy"></i>';
+    }, 2000);
+  });
+})();
+</script>
+</body>
+</html>

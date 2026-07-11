@@ -1,0 +1,312 @@
+/**
+ * Birajdar Travels — Multi-step booking wizard UI
+ */
+(function () {
+  const { SERVICE_TYPES, validateStep, buildBookingPayload, estimateTourPrice, formatINR, formatDate } = window.BTBooking;
+
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  const state = {
+    serviceType: 'spiritual',
+    travelDate: '',
+    travelingFrom: 'Mumbai',
+    pickup: '',
+    drop: '',
+    adults: 2,
+    childHalf: 0,
+    childFree: 0,
+    vehicle: 'Maruti Baleno',
+    estimatedKm: '',
+    customerName: '',
+    customerPhone: '',
+    customerEmail: '',
+    specialNotes: '',
+    agreedTerms: false
+  };
+
+  const els = {};
+
+  function $(id) { return document.getElementById(id); }
+
+  function cacheElements() {
+    els.wizard = $('bookingWizard');
+    if (!els.wizard) return false;
+
+    els.steps = els.wizard.querySelectorAll('.bk-step');
+    els.panels = els.wizard.querySelectorAll('.bk-panel');
+    els.progressFill = $('bkProgressFill');
+    els.stepLabel = $('bkStepLabel');
+    els.btnPrev = $('bkPrev');
+    els.btnNext = $('bkNext');
+    els.btnSubmit = $('bkSubmit');
+    els.errors = $('bkErrors');
+    els.livePrice = $('bkLivePrice');
+    els.reviewSummary = $('bkReviewSummary');
+    els.serviceCards = els.wizard.querySelectorAll('.bk-service-card');
+
+    els.travelDate = $('bkTravelDate');
+    els.travelingFrom = $('bkTravelingFrom');
+    els.pickup = $('bkPickup');
+    els.drop = $('bkDrop');
+    els.adults = $('bkAdults');
+    els.childHalf = $('bkChildHalf');
+    els.childFree = $('bkChildFree');
+    els.vehicle = $('bkVehicle');
+    els.estimatedKm = $('bkEstimatedKm');
+    els.customerName = $('bkName');
+    els.customerPhone = $('bkPhone');
+    els.customerEmail = $('bkEmail');
+    els.specialNotes = $('bkNotes');
+    els.agreedTerms = $('bkTerms');
+
+    els.tourFields = $('bkTourFields');
+    els.taxiFields = $('bkTaxiFields');
+    return true;
+  }
+
+  function showErrors(messages) {
+    if (!els.errors) return;
+    if (!messages.length) {
+      els.errors.hidden = true;
+      els.errors.innerHTML = '';
+      return;
+    }
+    els.errors.hidden = false;
+    els.errors.innerHTML = messages.map(m => `<p><i class="fa-solid fa-circle-exclamation"></i> ${m}</p>`).join('');
+  }
+
+  function readFormState() {
+    state.serviceType = els.wizard.querySelector('.bk-service-card.selected')?.dataset.service || state.serviceType;
+    state.travelDate = els.travelDate?.value || '';
+    state.travelingFrom = els.travelingFrom?.value || '';
+    state.pickup = els.pickup?.value || '';
+    state.drop = els.drop?.value || '';
+    state.adults = parseInt(els.adults?.value || '2', 10);
+    state.childHalf = parseInt(els.childHalf?.value || '0', 10);
+    state.childFree = parseInt(els.childFree?.value || '0', 10);
+    state.vehicle = els.vehicle?.value || '';
+    state.estimatedKm = els.estimatedKm?.value || '';
+    state.customerName = els.customerName?.value || '';
+    state.customerPhone = els.customerPhone?.value || '';
+    state.customerEmail = els.customerEmail?.value || '';
+    state.specialNotes = els.specialNotes?.value || '';
+    state.agreedTerms = els.agreedTerms?.checked || false;
+  }
+
+  function syncFormFromState() {
+    if (els.travelDate) els.travelDate.value = state.travelDate;
+    if (els.travelingFrom) els.travelingFrom.value = state.travelingFrom;
+    if (els.pickup) els.pickup.value = state.pickup;
+    if (els.drop) els.drop.value = state.drop;
+    if (els.adults) els.adults.value = state.adults;
+    if (els.childHalf) els.childHalf.value = state.childHalf;
+    if (els.childFree) els.childFree.value = state.childFree;
+    if (els.vehicle) els.vehicle.value = state.vehicle;
+    if (els.estimatedKm) els.estimatedKm.value = state.estimatedKm;
+    if (els.customerName) els.customerName.value = state.customerName;
+    if (els.customerPhone) els.customerPhone.value = state.customerPhone;
+    if (els.customerEmail) els.customerEmail.value = state.customerEmail;
+    if (els.specialNotes) els.specialNotes.value = state.specialNotes;
+    if (els.agreedTerms) els.agreedTerms.checked = state.agreedTerms;
+
+    els.serviceCards?.forEach(card => {
+      card.classList.toggle('selected', card.dataset.service === state.serviceType);
+    });
+
+    toggleServiceFields();
+    updateLivePrice();
+  }
+
+  function toggleServiceFields() {
+    const isTour = state.serviceType === 'spiritual';
+    if (els.tourFields) els.tourFields.hidden = !isTour;
+    if (els.taxiFields) els.taxiFields.hidden = isTour;
+  }
+
+  function updateLivePrice() {
+    if (!els.livePrice) return;
+    if (state.serviceType !== 'spiritual') {
+      els.livePrice.innerHTML = '<span class="bk-price-note">Fare confirmed on call based on distance</span>';
+      return;
+    }
+    const q = estimateTourPrice(state.adults, state.childHalf);
+    let html = `<div class="bk-price-row"><span>Package (${q.tier} adults tier)</span><strong>${formatINR(q.baseTotal)}</strong></div>`;
+    if (state.childHalf > 0) {
+      html += `<div class="bk-price-row"><span>Children 5–12 (${state.childHalf} × 50%)</span><strong>${formatINR(q.childHalfCharge)}</strong></div>`;
+    }
+    html += `<div class="bk-price-row total"><span>Estimated total</span><strong>${formatINR(q.estimatedTotal)}</strong></div>`;
+    html += `<p class="bk-price-meta"><i class="fa-solid fa-car"></i> ${q.vehicle}</p>`;
+    els.livePrice.innerHTML = html;
+  }
+
+  function buildReviewHTML() {
+    readFormState();
+    const rows = [
+      ['Service', SERVICE_TYPES[state.serviceType]?.label],
+      ['Travel date', formatDate(state.travelDate)],
+      ['Name', state.customerName],
+      ['Phone', state.customerPhone]
+    ];
+
+    if (state.customerEmail) rows.push(['Email', state.customerEmail]);
+
+    if (state.serviceType === 'spiritual') {
+      const q = estimateTourPrice(state.adults, state.childHalf);
+      rows.push(['Traveling from', state.travelingFrom]);
+      rows.push(['Adults', state.adults]);
+      if (state.childHalf) rows.push(['Children (5–12)', state.childHalf]);
+      if (state.childFree) rows.push(['Children (0–5)', state.childFree + ' (free)']);
+      rows.push(['Vehicle', q.vehicle]);
+      rows.push(['Estimated total', formatINR(q.estimatedTotal)]);
+    } else {
+      rows.push(['Pickup', state.pickup]);
+      rows.push(['Drop', state.drop]);
+      rows.push(['Vehicle', state.vehicle]);
+      if (state.estimatedKm) rows.push(['Est. distance', state.estimatedKm + ' km']);
+    }
+
+    if (state.specialNotes) rows.push(['Notes', state.specialNotes]);
+
+    return rows.map(([k, v]) =>
+      `<div class="bk-review-row"><span>${k}</span><strong>${v || '—'}</strong></div>`
+    ).join('');
+  }
+
+  function goToStep(step) {
+    currentStep = Math.max(1, Math.min(totalSteps, step));
+    showErrors([]);
+
+    els.steps?.forEach(s => {
+      const n = parseInt(s.dataset.step, 10);
+      s.classList.toggle('active', n === currentStep);
+      s.classList.toggle('done', n < currentStep);
+    });
+
+    els.panels?.forEach(p => {
+      p.hidden = parseInt(p.dataset.panel, 10) !== currentStep;
+    });
+
+    if (els.progressFill) {
+      els.progressFill.style.width = `${((currentStep - 1) / (totalSteps - 1)) * 100}%`;
+    }
+    if (els.stepLabel) {
+      els.stepLabel.textContent = `Step ${currentStep} of ${totalSteps}`;
+    }
+
+    els.btnPrev.hidden = currentStep === 1;
+    els.btnNext.hidden = currentStep === totalSteps;
+    els.btnSubmit.hidden = currentStep !== totalSteps;
+
+    if (currentStep === totalSteps && els.reviewSummary) {
+      readFormState();
+      els.reviewSummary.innerHTML = buildReviewHTML();
+      updateLivePrice();
+    }
+
+    if (currentStep === 2) {
+      readFormState();
+      toggleServiceFields();
+      updateLivePrice();
+    }
+  }
+
+  async function submitBooking() {
+    readFormState();
+    const errors = validateStep(state, 4);
+    if (errors.length) {
+      showErrors(errors);
+      return;
+    }
+
+    const booking = buildBookingPayload(state);
+    els.btnSubmit.disabled = true;
+    els.btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing booking…';
+
+    try {
+      await window.BTBookingAPI.submitBooking(booking);
+      window.location.href = `confirm.html?ref=${encodeURIComponent(booking.bookingRef)}`;
+    } catch (e) {
+      showErrors(['Could not place booking. Please call us at +91 9322613925.']);
+      els.btnSubmit.disabled = false;
+      els.btnSubmit.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Booking';
+    }
+  }
+
+  function bindEvents() {
+    els.serviceCards?.forEach(card => {
+      card.addEventListener('click', () => {
+        state.serviceType = card.dataset.service;
+        syncFormFromState();
+      });
+    });
+
+    ['input', 'change'].forEach(evt => {
+      els.wizard.addEventListener(evt, (e) => {
+        if (e.target.matches('input, select, textarea')) {
+          readFormState();
+          updateLivePrice();
+        }
+      });
+    });
+
+    els.btnPrev?.addEventListener('click', () => goToStep(currentStep - 1));
+
+    els.btnNext?.addEventListener('click', () => {
+      readFormState();
+      const errors = validateStep(state, currentStep);
+      if (errors.length) {
+        showErrors(errors);
+        return;
+      }
+      goToStep(currentStep + 1);
+    });
+
+    els.btnSubmit?.addEventListener('click', submitBooking);
+
+    if (els.travelDate) {
+      els.travelDate.setAttribute('min', new Date().toISOString().split('T')[0]);
+    }
+  }
+
+  function prefillFromParams() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('service')) state.serviceType = params.get('service');
+    if (params.get('city')) state.travelingFrom = params.get('city');
+    if (params.get('adults')) state.adults = parseInt(params.get('adults'), 10) || 2;
+
+    const hash = window.location.hash;
+    if (hash.includes('spiritual') || document.querySelector('[data-tour="spiritual"]:target')) {
+      state.serviceType = 'spiritual';
+    }
+  }
+
+  function prefillFromTourCTA() {
+    document.querySelectorAll('[data-tour="spiritual"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.serviceType = 'spiritual';
+        state.drop = 'Gangapur, Akkalkot, Tuljapur, Pandharpur';
+        const activeTab = document.querySelector('.city-tab.active');
+        const cityMap = { mumbai: 'Mumbai', pune: 'Pune', nagpur: 'Nagpur', hyderabad: 'Hyderabad', bengaluru: 'Bengaluru' };
+        if (activeTab) state.travelingFrom = cityMap[activeTab.dataset.city] || 'Mumbai';
+        syncFormFromState();
+        goToStep(1);
+      });
+    });
+  }
+
+  window.BTBookingUI = {
+    init() {
+      if (!cacheElements()) return;
+      prefillFromParams();
+      bindEvents();
+      syncFormFromState();
+      prefillFromTourCTA();
+      goToStep(1);
+    },
+    setState(partial) {
+      Object.assign(state, partial);
+      syncFormFromState();
+    }
+  };
+})();
