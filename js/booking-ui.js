@@ -106,7 +106,18 @@
     state.agreedTerms = els.agreedTerms?.checked || false;
   }
 
+  function selectServiceCards() {
+    els.serviceCards?.forEach(card => {
+      const selected = card.dataset.service === state.serviceType;
+      card.classList.toggle('selected', selected);
+      card.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
+
   function syncFormFromState() {
+    selectServiceCards();
+    toggleServiceFields();
+
     if (els.travelDate) els.travelDate.value = state.travelDate;
     if (els.travelingFrom) els.travelingFrom.value = state.travelingFrom;
     if (els.pickup) els.pickup.value = state.pickup;
@@ -114,7 +125,7 @@
     if (els.adults) els.adults.value = state.adults;
     if (els.childHalf) els.childHalf.value = state.childHalf;
     if (els.childFree) els.childFree.value = state.childFree;
-    updateTourVehicleOptions(true);
+    if (state.serviceType === 'spiritual') updateTourVehicleOptions(true);
     if (els.tourVehicle) els.tourVehicle.value = state.tourVehicle;
     if (els.vehicle) els.vehicle.value = state.vehicle;
     if (els.estimatedKm) els.estimatedKm.value = state.estimatedKm;
@@ -124,11 +135,6 @@
     if (els.specialNotes) els.specialNotes.value = state.specialNotes;
     if (els.agreedTerms) els.agreedTerms.checked = state.agreedTerms;
 
-    els.serviceCards?.forEach(card => {
-      card.classList.toggle('selected', card.dataset.service === state.serviceType);
-    });
-
-    toggleServiceFields();
     updateLivePrice();
   }
 
@@ -325,11 +331,12 @@
   }
 
   function bindEvents() {
-    els.serviceCards?.forEach(card => {
-      card.addEventListener('click', () => {
-        state.serviceType = card.dataset.service;
-        syncFormFromState();
-      });
+    const serviceGrid = els.wizard.querySelector('.bk-service-grid');
+    serviceGrid?.addEventListener('click', (e) => {
+      const card = e.target.closest('.bk-service-card');
+      if (!card?.dataset.service) return;
+      state.serviceType = card.dataset.service;
+      syncFormFromState();
     });
 
     ['input', 'change'].forEach(evt => {

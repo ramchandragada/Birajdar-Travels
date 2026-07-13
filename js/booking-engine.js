@@ -301,6 +301,7 @@
     SERVICE_TYPES,
     estimateTourPrice,
     renderLivePriceSidebar,
+    getAdultPricingTier,
     getDefaultVehicleId,
     getAvailableTourVehicles,
     resolveTourVehicle,
