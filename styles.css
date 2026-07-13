@@ -2327,6 +2327,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height
 
 .bk-terms input { margin-top: 4px; flex-shrink: 0; accent-color: var(--gold); }
 
+.bk-terms.invalid {
+  color: #b91c1c;
+  padding: 12px;
+  margin: -12px -12px 8px;
+  border-radius: 12px;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+}
+
 .bk-payment-preview {
   padding: 16px;
   background: rgba(245, 158, 11, 0.08);

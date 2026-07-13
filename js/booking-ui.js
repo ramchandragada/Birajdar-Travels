@@ -81,10 +81,19 @@
     if (!messages.length) {
       els.errors.hidden = true;
       els.errors.innerHTML = '';
+      els.agreedTerms?.closest('.bk-terms')?.classList.remove('invalid');
       return;
     }
     els.errors.hidden = false;
     els.errors.innerHTML = messages.map(m => `<p><i class="fa-solid fa-circle-exclamation"></i> ${m}</p>`).join('');
+    els.errors.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    if (messages.some(m => /terms/i.test(m))) {
+      els.agreedTerms?.closest('.bk-terms')?.classList.add('invalid');
+      els.agreedTerms?.focus();
+    } else {
+      els.agreedTerms?.closest('.bk-terms')?.classList.remove('invalid');
+    }
   }
 
   function readFormState() {
@@ -159,13 +168,16 @@
       ? (els.tourVehicle.value || state.tourVehicle)
       : state.tourVehicle;
 
-    state.tourVehicle = resolveTourVehicle(tier, seatCount, currentSelection);
+    const resolved = resolveTourVehicle(tier, seatCount, currentSelection);
+    const keepSelection = preserveSelection && available.includes(currentSelection);
+    state.tourVehicle = keepSelection ? currentSelection : resolved;
+    const recommendedId = resolved;
 
     els.tourVehicle.innerHTML = available.map(id => {
       const v = TOUR_VEHICLES[id];
       const price = prices[id];
-      const isDefault = id === BT().getDefaultVehicleId(tier);
-      const defaultTag = isDefault ? ' (recommended)' : '';
+      const isRecommended = id === recommendedId;
+      const defaultTag = isRecommended ? ' (recommended)' : '';
       return `<option value="${id}">${v.label} — ${formatINR(price)}${defaultTag}</option>`;
     }).join('');
 
